@@ -8,6 +8,12 @@ output:
 
 ----
 
+```{r}
+setwd("C:/Users/user/Desktop/Thesisfiles")
+final.df <- read.csv("final.df.csv")
+```
+
+
 
 ### Load R packages 
 
@@ -25,13 +31,11 @@ library(estimatr)
 
 
 ## Introduction
-The panel data is clustered by 1063 schools. Schools were observed between 2015-2016, before the start of the program and in 2015-2016 after the end of the program. 
+The panel data is clustered by 1069 schools. Schools were observed between 2015-2016, before the start of the program and in 2015-2016 after the end of the program. 
 
 
 Schools were divided into sectors as follows:
 ```{r}
-setwd("C:/Users/user/Desktop/Thesisfiles")
-final.df <- read.csv("final.df.csv")
 table(final.df$CODE_MIGZAR)
 ```
 "0" - Jewish sector
