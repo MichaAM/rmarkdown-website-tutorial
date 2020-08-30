@@ -1,8 +1,8 @@
-name: "R Markdown Websites Tutorial"
+name: "R Markdown Thesis results"
 navbar:
   title: "HOME"
   left:
-    - text: "First Observations"
+    - text: "Thesis results"
       href: first_observations.html
     - text: "Basic Workflow"
       href: basic_workflow.html
