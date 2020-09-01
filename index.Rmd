@@ -65,6 +65,19 @@ length(unique(final.df$CODE_MOSAD))
 
 # General DiD regression
 
+## Balancing test general sample 
+```{r}
+
+```
+
+
+
+
+
+
+
+
+
 ## general DiD regression with clustered SE
 ```{r include=FALSE}
 didreg.heb <- lm_robust(heb.zscore ~ treat + after + did,
