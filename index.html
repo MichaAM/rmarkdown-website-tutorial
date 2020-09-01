@@ -365,6 +365,11 @@ final.df &lt;- read.csv(&quot;final.df.csv&quot;)</code></pre>
 </div>
 <div id="general-did-regression" class="section level1">
 <h1>General DiD regression</h1>
+<div id="balancing-test-general-sample" class="section level2">
+<h2>Balancing test general sample</h2>
+<p><img src="images/General.png" /></p>
+<p><br></p>
+</div>
 <div id="general-did-regression-with-clustered-se" class="section level2">
 <h2>general DiD regression with clustered SE</h2>
 <div id="table-1---general-did-with-clustered-se" class="section level3">
@@ -447,6 +452,12 @@ final.df &lt;- read.csv(&quot;final.df.csv&quot;)</code></pre>
 </div>
 <div id="anlalysis-by-sectors---jewish0-vs-arab1" class="section level1">
 <h1>Anlalysis by sectors - Jewish(“0”) vs Arab(“1”)</h1>
+<div id="balancing-test-general-sample-1" class="section level2">
+<h2>Balancing test general sample</h2>
+<p><img src="images/Jewish%20sector.png" /></p>
+<p><br></p>
+<p><img src="images/Arab%20sector.png" /></p>
+<p><br></p>
 <div id="obsevations-by-sectores-table" class="section level3">
 <h3>Obsevations by sectores table</h3>
 <pre class="r"><code>table(final.df$CODE_MIGZAR)</code></pre>
@@ -460,6 +471,7 @@ final.df &lt;- read.csv(&quot;final.df.csv&quot;)</code></pre>
   filter(CODE_MIGZAR == &quot;0&quot;) 
 final_df_arb &lt;- final.df %&gt;%
   filter(CODE_MIGZAR == &quot;1&quot;) </code></pre>
+</div>
 </div>
 <div id="did-regression-with-clustered-se---jewish-sector" class="section level2">
 <h2>DiD regression with clustered SE - Jewish sector</h2>
@@ -623,6 +635,10 @@ final_df_arb &lt;- final.df %&gt;%
 <div id="did-regression-by-regions---periphery-vs-rest" class="section level1">
 <h1>DiD regression by regions - periphery vs rest</h1>
 <p>Because almost all observation in the north and south regions took part in the program, I will check only the difference in the other regions.</p>
+<p><img src="images/Not%20Periphery%20-%20jewish%20sector.png" /></p>
+<p><br></p>
+<p><img src="images/arab%20sector.png" /></p>
+<p><br></p>
 <div id="split-the-data-by-regions-periphery-0-and-rest-1" class="section level3">
 <h3>Split the data by regions periphery (“0”) and rest (“1”)</h3>
 <pre class="r"><code>final.df$CODE_MACHOZ_GEOGRAFI &lt;- ifelse(final.df$CODE_MACHOZ_GEOGRAFI == &quot;2&quot; | final.df$CODE_MACHOZ_GEOGRAFI == &quot;6&quot;, &quot;0&quot;, &quot;1&quot;)

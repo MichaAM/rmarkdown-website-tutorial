@@ -66,15 +66,10 @@ length(unique(final.df$CODE_MOSAD))
 # General DiD regression
 
 ## Balancing test general sample 
-```{r}
 
-```
+![](images/General.png)
 
-
-
-
-
-
+<br> 
 
 
 
@@ -137,6 +132,17 @@ screenreg(list(didreg.heb.fe.var, didreg.mat.fe.var, didreg.eng.fe.var, didreg.a
 
 
 # Anlalysis by sectors - Jewish("0") vs Arab("1") 
+
+## Balancing test general sample 
+
+![](images/Jewish sector.png)
+
+<br> 
+
+![](images/Arab sector.png)
+
+<br> 
+
 
 ### Obsevations by sectores table 
 ```{R}
@@ -279,7 +285,13 @@ screenreg(list(didreg.arb.fe.var.arb, didreg.mat.fe.var.arb, didreg.eng.fe.var.a
 Because almost all observation in the north and south regions took part in the program, I will check only the difference in the 
 other regions. 
 
+![](images/Not Periphery - jewish sector.png)
 
+<br> 
+
+![](images/arab sector.png)
+
+<br> 
 
 ### Split the data by regions periphery ("0") and rest ("1") 
 ```{r message=FALSE}
