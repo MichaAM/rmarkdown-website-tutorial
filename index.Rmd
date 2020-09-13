@@ -10,7 +10,7 @@ output:
 
 ```{r}
 setwd("C:/Users/user/Desktop/Thesisfiles")
-final.df <- read.csv("final.df.csv")
+final.df <- read.csv("finald.csv")
 ```
 
 
@@ -31,12 +31,12 @@ library(estimatr)
 
 
 ## Introduction
-The panel data is clustered by 1069 schools. Schools were observed between 2015-2016, before the start of the program and in 2015-2016 after the end of the program. 
+The panel data is clustered by 1069 schools. Schools were observed between 2008-2009, before the start of the program and in 2015-2016 after the end of the program. 
 
 
 Schools were divided into sectors as follows:
 ```{r}
-table(final.df$CODE_MIGZAR)
+table(finald$CODE_MIGZAR)
 ```
 "0" - Jewish sector
 "1" _ Arabic sector
@@ -44,23 +44,23 @@ table(final.df$CODE_MIGZAR)
 
 Schools were divided by years and sectors as follows:
 ```{r}
-table(final.df$CODE_MIGZAR, final.df$SHNAT_LIMUD)
+table(finald$CODE_MIGZAR, finald$SHNAT_LIMUD)
 ```
 
 Schools were divided by treatment as follows:
 ```{r}
-table(final.df$treat)
+table(finald$treat)
 ```
 
 
 
 ```{r}
-str(final.df)
+str(finald)
 ```
 
 # Number of schools observed in the 2 periods - Before and after the treatment  
 ```{r}
-length(unique(final.df$CODE_MOSAD))
+length(unique(finald$CODE_MOSAD))
 ```
 
 # General DiD regression
@@ -76,13 +76,13 @@ length(unique(final.df$CODE_MOSAD))
 ## general DiD regression with clustered SE
 ```{r include=FALSE}
 didreg.heb <- lm_robust(heb.zscore ~ treat + after + did,
-                      data = final.df, clusters = CODE_MOSAD, se_type = "stata")
+                      data = finald, clusters = CODE_MOSAD, se_type = "stata")
 didreg.mat <- lm_robust(mat.zscore ~ treat + after + did,
-                     data = final.df, clusters = CODE_MOSAD, se_type = "stata")
+                     data = finald, clusters = CODE_MOSAD, se_type = "stata")
 didreg.eng <- lm_robust(eng.zscore ~ treat + after + did,
-                     data = final.df, clusters = CODE_MOSAD, se_type = "stata")
+                     data = finald, clusters = CODE_MOSAD, se_type = "stata")
 didreg.arb <- lm_robust(arb.zscore ~ treat + after + did,
-                     data = final.df, clusters = CODE_MOSAD, se_type = "stata")
+                     data = finald, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
 ### Table 1 - General DiD with clustered SE 
@@ -96,13 +96,13 @@ screenreg(list(didreg.heb, didreg.mat, didreg.eng, didreg.arb), include.ci = F, 
 
 ```{r include=FALSE}
 didreg.heb.fe <- lm_robust(heb.zscore ~ treat + after + did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.mat.fe <- lm_robust(mat.zscore ~ treat + after + did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.eng.fe <- lm_robust(eng.zscore ~ treat + after + did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.arb.fe <- lm_robust(arb.zscore ~ treat + after + did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 ```
 
 ### Table 2 - General DiD with clustered SE - with fixed effects 
@@ -114,10 +114,10 @@ screenreg(list(didreg.heb.fe, didreg.mat.fe, didreg.eng.fe, didreg.arb.fe),
 ## general DiD regression with clustered SE - with fixed effects & additional variables 
 
 ```{r include=FALSE}
-didreg.heb.fe.var <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.arb.fe.var <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final.df, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+didreg.heb.fe.var <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+didreg.mat.fe.var <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+didreg.eng.fe.var <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
+didreg.arb.fe.var <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 ```
 
 ### Table 3 - General DiD with clustered SE - with fixed effects & additional variables
@@ -126,6 +126,7 @@ didreg.arb.fe.var <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + S
 screenreg(list(didreg.heb.fe.var, didreg.mat.fe.var, didreg.eng.fe.var, didreg.arb.fe.var), 
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic"),
           custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,"mean_tipuah" = "SES index",
                                  "SHNOT_LIMUD_EM" = "Mother's years of education", "mean_kids_per_class_by_school_year" = "Class size",
                                  "erets_leda_ISR" = "Native indicator"))
 ```
