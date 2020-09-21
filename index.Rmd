@@ -10,7 +10,7 @@ output:
 
 ```{r}
 setwd("C:/Users/user/Desktop/Thesisfiles")
-final.df <- read.csv("finald.csv")
+finald <- read.csv("finald.csv")
 ```
 
 
@@ -63,73 +63,11 @@ str(finald)
 length(unique(finald$CODE_MOSAD))
 ```
 
-# General DiD regression
-
-## Balancing test general sample 
+## Balancing test for general sample 
 
 ![](images/General.png)
 
 <br> 
-
-
-
-## general DiD regression with clustered SE
-```{r include=FALSE}
-didreg.heb <- lm_robust(heb.zscore ~ treat + after + did,
-                      data = finald, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat <- lm_robust(mat.zscore ~ treat + after + did,
-                     data = finald, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng <- lm_robust(eng.zscore ~ treat + after + did,
-                     data = finald, clusters = CODE_MOSAD, se_type = "stata")
-didreg.arb <- lm_robust(arb.zscore ~ treat + after + did,
-                     data = finald, clusters = CODE_MOSAD, se_type = "stata")
-```
-
-### Table 1 - General DiD with clustered SE 
-```{r}
-screenreg(list(didreg.heb, didreg.mat, didreg.eng, didreg.arb), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic"), custom.coef.map = list("did" = "Diff-in-Diff"))
-
-```
-
-## general DiD regression with clustered SE - with fixed effects
-
-```{r include=FALSE}
-didreg.heb.fe <- lm_robust(heb.zscore ~ treat + after + did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe <- lm_robust(mat.zscore ~ treat + after + did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe <- lm_robust(eng.zscore ~ treat + after + did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.arb.fe <- lm_robust(arb.zscore ~ treat + after + did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                        data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-```
-
-### Table 2 - General DiD with clustered SE - with fixed effects 
-```{r message=FALSE, warning=FALSE}
-screenreg(list(didreg.heb.fe, didreg.mat.fe, didreg.eng.fe, didreg.arb.fe), 
-          include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Hebrew", "Math","English", "Arabic"), custom.coef.map = list("did" = "Diff-in-Diff"))
-```
-
-## general DiD regression with clustered SE - with fixed effects & additional variables 
-
-```{r include=FALSE}
-didreg.heb.fe.var <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.arb.fe.var <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = finald, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-```
-
-### Table 3 - General DiD with clustered SE - with fixed effects & additional variables
-```{r message=FALSE, warning=FALSE}
-
-screenreg(list(didreg.heb.fe.var, didreg.mat.fe.var, didreg.eng.fe.var, didreg.arb.fe.var), 
-          include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic"),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,"mean_tipuah" = "SES index",
-                                  "mean_kids_per_class_by_school_year" = "Class size"))
-```
 
 
 # Anlalysis by sectors - Jewish("0") vs Arab("1") 
@@ -237,13 +175,13 @@ screenreg(list(didreg.arb.arb.fe, didreg.mat.arb.fe, didreg.eng.arb.fe), include
 ## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
 ```{r include=FALSE}
 didreg.heb.fe.var.jew <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final_df_jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.mat.fe.var.jew <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final_df_jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.eng.fe.var.jew <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final_df_jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 
 ```
@@ -254,7 +192,7 @@ screenreg(list(didreg.heb.fe.var.jew, didreg.mat.fe.var.jew, didreg.eng.fe.var.j
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Hebrew", "Math", "English"),
           custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
                                  "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,"mean_tipuah" = "SES index",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,"SES_index" = "SES index",
                                   "mean_kids_per_class_by_school_year" = "Class size"))
 ```
 
@@ -262,13 +200,13 @@ screenreg(list(didreg.heb.fe.var.jew, didreg.mat.fe.var.jew, didreg.eng.fe.var.j
 ## DiD regression with clustered SE + Fixed effects + additional variables - Arabic sector
 ```{r include=FALSE}
 didreg.arb.fe.var.arb <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                     dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR+ MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR+ MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                    data = final_df_arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.mat.fe.var.arb <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                     dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                    data = final_df_arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.eng.fe.var.arb <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                     dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                    data = final_df_arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 
 ```
@@ -279,7 +217,7 @@ screenreg(list(didreg.arb.fe.var.arb, didreg.mat.fe.var.arb, didreg.eng.fe.var.a
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Arabic", "Math", "English"),
           custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
                                  "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,"mean_tipuah" = "SES index",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,"SES_index" = "SES index",
                                   "mean_kids_per_class_by_school_year" = "Class size"))
 ```
 
@@ -292,9 +230,6 @@ other regions.
 
 <br> 
 
-![](images/Not Periphery - Arab sector.png)
-
-<br> 
 
 ### Split the data by regions periphery ("0") and rest ("1") 
 ```{r message=FALSE}
@@ -414,13 +349,13 @@ screenreg(list(didreg.arb.rest.arb.fe, didreg.mat.rest.arb.fe, didreg.eng.rest.a
 ## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
 ```{r include=FALSE}
 didreg.heb.fe.var.jew.rest <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df_rest.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.mat.fe.var.jew.rest <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df_rest.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.eng.fe.var.jew.rest <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df_rest.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 
 ```
@@ -431,20 +366,20 @@ screenreg(list(didreg.heb.fe.var.jew.rest, didreg.mat.fe.var.jew.rest, didreg.en
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Hebrew", "Math", "English"),
           custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
                                  "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,"mean_tipuah" = "SES index",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,"SES_index" = "SES index",
                                   "mean_kids_per_class_by_school_year" = "Class size"))
 ```
 
 ## DiD regression with clustered SE + Fixed effects + additional variables - Arab sector
 ```{r include=FALSE}
 didreg.arb.fe.var.arb.rest <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df_rest.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.mat.fe.var.arb.rest <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df_rest.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 didreg.eng.fe.var.arb.rest <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + mean_tipuah, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM + SES_index, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df_rest.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
 
 ```
@@ -455,7 +390,7 @@ screenreg(list(didreg.arb.fe.var.arb.rest, didreg.mat.fe.var.arb.rest, didreg.en
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c("Arabic", "Math", "English"),
           custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
                                  "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,"mean_tipuah" = "SES index",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,"SES_index" = "SES index",
                                   "mean_kids_per_class_by_school_year" = "Class size"))
 ```
 
