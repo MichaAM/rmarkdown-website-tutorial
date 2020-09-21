@@ -260,7 +260,7 @@ region_tbl
 
 ### Table of observations per region per sector 
 ```{r message=FALSE}
-region_sectore_table <- table(final.df$mahoz_ind, final.df$CODE_MIGZAR)
+region_sectore_table <- table(finald$mahoz_ind, finald$CODE_MIGZAR)
 rownames(region_sectore_table) <- c("Periphery", "Rest" )
 colnames(region_sectore_table) <- c("Jewish", "Arab" )
 region_sectore_table

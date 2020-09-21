@@ -304,34 +304,34 @@ $(document).ready(function () {
 
 <hr />
 <pre class="r"><code>setwd(&quot;C:/Users/user/Desktop/Thesisfiles&quot;)
-final.df &lt;- read.csv(&quot;final.df.csv&quot;)</code></pre>
+finald &lt;- read.csv(&quot;finald.csv&quot;)</code></pre>
 <div id="load-r-packages" class="section level3">
 <h3>Load R packages</h3>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>The panel data is clustered by 1069 schools. Schools were observed between 2015-2016, before the start of the program and in 2015-2016 after the end of the program.</p>
+<p>The panel data is clustered by 1069 schools. Schools were observed between 2008-2009, before the start of the program and in 2015-2016 after the end of the program.</p>
 <p>Schools were divided into sectors as follows:</p>
-<pre class="r"><code>table(final.df$CODE_MIGZAR)</code></pre>
+<pre class="r"><code>table(finald$CODE_MIGZAR)</code></pre>
 <pre><code>## 
 ##     0     1 
 ## 90948 36567</code></pre>
 <p>“0” - Jewish sector “1” _ Arabic sector</p>
 <p>Schools were divided by years and sectors as follows:</p>
-<pre class="r"><code>table(final.df$CODE_MIGZAR, final.df$SHNAT_LIMUD)</code></pre>
+<pre class="r"><code>table(finald$CODE_MIGZAR, finald$SHNAT_LIMUD)</code></pre>
 <pre><code>##    
 ##      2008  2009  2015  2016
 ##   0 19228 25790 22326 23604
 ##   1  8516 10285  8170  9596</code></pre>
 <p>Schools were divided by treatment as follows:</p>
-<pre class="r"><code>table(final.df$treat)</code></pre>
+<pre class="r"><code>table(finald$treat)</code></pre>
 <pre><code>## 
 ##     0     1 
 ## 51842 75673</code></pre>
-<pre class="r"><code>str(final.df)</code></pre>
-<pre><code>## &#39;data.frame&#39;:    127515 obs. of  27 variables:
-##  $ X.1                               : int  1 2 4 5 6 8 9 12 17 18 ...
-##  $ X                                 : int  1 2 4 5 6 8 9 12 17 18 ...
+<pre class="r"><code>str(finald)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    127515 obs. of  30 variables:
+##  $ X.1                               : int  1 2 3 4 5 6 7 8 9 10 ...
+##  $ X                                 : int  1 2 3 4 5 6 7 8 9 10 ...
 ##  $ CODE_MOSAD                        : Factor w/ 1069 levels &quot;D0108756130N0003209990C&quot;,..: 168 429 621 571 615 931 429 376 750 733 ...
 ##  $ SHNAT_LIMUD                       : int  2008 2008 2008 2008 2008 2008 2008 2008 2008 2008 ...
 ##  $ CODE_ZEHUT_TALMID                 : Factor w/ 127278 levels &quot;D0007155831N0002673851C&quot;,..: 1 2 3 4 5 6 7 8 10 11 ...
@@ -356,103 +356,24 @@ final.df &lt;- read.csv(&quot;final.df.csv&quot;)</code></pre>
 ##  $ dummy_year_2016                   : int  0 0 0 0 0 0 0 0 0 0 ...
 ##  $ mean_kids_per_class_by_school_year: num  32.7 10 34 27.7 18.5 ...
 ##  $ erets_leda_ISR                    : int  1 1 1 1 1 1 1 1 1 1 ...
-##  $ mahoz_ind                         : int  1 1 0 0 0 0 1 0 0 0 ...</code></pre>
+##  $ mahoz_ind                         : int  1 1 0 0 0 0 1 0 0 0 ...
+##  $ MISPAR_ACHIM                      : int  1 1 4 0 1 1 6 4 0 3 ...
+##  $ MAKBILA                           : int  2 1 1 2 2 2 1 2 2 3 ...
+##  $ SES_index                         : num  4.93 7.26 7.9 7.4 6.88 ...</code></pre>
 </div>
 <div id="number-of-schools-observed-in-the-2-periods---before-and-after-the-treatment" class="section level1">
 <h1>Number of schools observed in the 2 periods - Before and after the treatment</h1>
-<pre class="r"><code>length(unique(final.df$CODE_MOSAD))</code></pre>
+<pre class="r"><code>length(unique(finald$CODE_MOSAD))</code></pre>
 <pre><code>## [1] 1069</code></pre>
-</div>
-<div id="general-did-regression" class="section level1">
-<h1>General DiD regression</h1>
-<div id="balancing-test-general-sample" class="section level2">
-<h2>Balancing test general sample</h2>
+<div id="balancing-test-for-general-sample" class="section level2">
+<h2>Balancing test for general sample</h2>
 <p><img src="images/General.png" /></p>
 <p><br></p>
-</div>
-<div id="general-did-regression-with-clustered-se" class="section level2">
-<h2>general DiD regression with clustered SE</h2>
-<div id="table-1---general-did-with-clustered-se" class="section level3">
-<h3>Table 1 - General DiD with clustered SE</h3>
-<pre class="r"><code>screenreg(list(didreg.heb, didreg.mat, didreg.eng, didreg.arb), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c(&quot;Hebrew&quot;, &quot;Math&quot;, &quot;English&quot;, &quot;Arabic&quot;), custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;))</code></pre>
-<pre><code>## 
-## ============================================================
-##               Hebrew      Math        English     Arabic    
-## ------------------------------------------------------------
-## Diff-in-Diff      0.046       0.050       0.008       0.110 
-##                  (0.037)     (0.045)     (0.045)     (0.075)
-## ------------------------------------------------------------
-## R^2               0.000       0.004       0.003       0.009 
-## Adj. R^2          0.000       0.004       0.003       0.009 
-## Num. obs.     64693       90392       86832       26044     
-## RMSE              0.982       0.990       0.993       0.993 
-## N Clusters      816        1068         992         255     
-## ============================================================
-## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
-</div>
-</div>
-<div id="general-did-regression-with-clustered-se---with-fixed-effects" class="section level2">
-<h2>general DiD regression with clustered SE - with fixed effects</h2>
-<div id="table-2---general-did-with-clustered-se---with-fixed-effects" class="section level3">
-<h3>Table 2 - General DiD with clustered SE - with fixed effects</h3>
-<pre class="r"><code>screenreg(list(didreg.heb.fe, didreg.mat.fe, didreg.eng.fe, didreg.arb.fe), 
-          include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c(&quot;Hebrew&quot;, &quot;Math&quot;,&quot;English&quot;, &quot;Arabic&quot;), custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;))</code></pre>
-<pre><code>## 
-## ==============================================================
-##               Hebrew      Math        English     Arabic      
-## --------------------------------------------------------------
-## Diff-in-Diff     -0.002       0.052       0.034       0.202 **
-##                  (0.038)     (0.044)     (0.046)     (0.096)  
-## --------------------------------------------------------------
-## R^2               0.120       0.215       0.175       0.154   
-## Adj. R^2          0.109       0.205       0.165       0.145   
-## Num. obs.     64693       90392       86832       26044       
-## RMSE              0.927       0.884       0.908       0.922   
-## N Clusters      816        1068         992         255       
-## ==============================================================
-## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
-</div>
-</div>
-<div id="general-did-regression-with-clustered-se---with-fixed-effects-additional-variables" class="section level2">
-<h2>general DiD regression with clustered SE - with fixed effects &amp; additional variables</h2>
-<div id="table-3---general-did-with-clustered-se---with-fixed-effects-additional-variables" class="section level3">
-<h3>Table 3 - General DiD with clustered SE - with fixed effects &amp; additional variables</h3>
-<pre class="r"><code>screenreg(list(didreg.heb.fe.var, didreg.mat.fe.var, didreg.eng.fe.var, didreg.arb.fe.var), 
-          include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c(&quot;Hebrew&quot;, &quot;Math&quot;, &quot;English&quot;, &quot;Arabic&quot;),
-          custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;, &quot;CODE_MIN&quot; = &quot;Sex&quot;, &quot;SHNOT_LIMUD_AV&quot; = &quot;Father&#39;s years of education&quot;,
-                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;, &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;,
-                                 &quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;))</code></pre>
-<pre><code>## 
-## =======================================================================================
-##                              Hebrew         Math           English        Arabic       
-## ---------------------------------------------------------------------------------------
-## Diff-in-Diff                     0.006          0.049          0.050          0.216 ** 
-##                                 (0.038)        (0.044)        (0.046)        (0.093)   
-## Sex                              0.287 ***     -0.052 ***      0.082 ***      0.499 ***
-##                                 (0.009)        (0.009)        (0.009)        (0.014)   
-## Father&#39;s years of education      0.011 ***      0.010 ***      0.008 ***     -0.002 *  
-##                                 (0.001)        (0.001)        (0.001)        (0.001)   
-## Mother&#39;s years of education      0.018 ***      0.011 ***      0.010 ***     -0.005 ***
-##                                 (0.001)        (0.001)        (0.001)        (0.001)   
-## Class size                       0.006 **      -0.004         -0.009 **       0.007    
-##                                 (0.003)        (0.004)        (0.004)        (0.006)   
-## Native indicator                 0.346 ***      0.111 ***     -0.242 ***      0.034    
-##                                 (0.027)        (0.022)        (0.024)        (0.109)   
-## ---------------------------------------------------------------------------------------
-## R^2                              0.158          0.224          0.184          0.217    
-## Adj. R^2                         0.147          0.214          0.175          0.209    
-## Num. obs.                    64693          90392          86832          26044        
-## RMSE                             0.907          0.879          0.903          0.887    
-## N Clusters                     816           1068            992            255        
-## =======================================================================================
-## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
-</div>
 </div>
 </div>
 <div id="anlalysis-by-sectors---jewish0-vs-arab1" class="section level1">
 <h1>Anlalysis by sectors - Jewish(“0”) vs Arab(“1”)</h1>
-<div id="balancing-test-general-sample-1" class="section level2">
+<div id="balancing-test-general-sample" class="section level2">
 <h2>Balancing test general sample</h2>
 <p><img src="images/Jewish%20sector.png" /></p>
 <p><br></p>
@@ -460,16 +381,16 @@ final.df &lt;- read.csv(&quot;final.df.csv&quot;)</code></pre>
 <p><br></p>
 <div id="obsevations-by-sectores-table" class="section level3">
 <h3>Obsevations by sectores table</h3>
-<pre class="r"><code>table(final.df$CODE_MIGZAR)</code></pre>
+<pre class="r"><code>table(finald$CODE_MIGZAR)</code></pre>
 <pre><code>## 
 ##     0     1 
 ## 90948 36567</code></pre>
 </div>
 <div id="split-the-data-by-sectores" class="section level3">
 <h3>Split the data by sectores</h3>
-<pre class="r"><code>final_df_jew &lt;- final.df %&gt;%
+<pre class="r"><code>final_df_jew &lt;- finald %&gt;%
   filter(CODE_MIGZAR == &quot;0&quot;) 
-final_df_arb &lt;- final.df %&gt;%
+final_df_arb &lt;- finald %&gt;%
   filter(CODE_MIGZAR == &quot;1&quot;) </code></pre>
 </div>
 </div>
@@ -568,29 +489,34 @@ final_df_arb &lt;- final.df %&gt;%
 <pre class="r"><code>screenreg(list(didreg.heb.fe.var.jew, didreg.mat.fe.var.jew, didreg.eng.fe.var.jew), 
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c(&quot;Hebrew&quot;, &quot;Math&quot;, &quot;English&quot;),
           custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;, &quot;CODE_MIN&quot; = &quot;Sex&quot;, &quot;SHNOT_LIMUD_AV&quot; = &quot;Father&#39;s years of education&quot;,
-                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;, &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;,
-                                 &quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;))</code></pre>
+                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;,&quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;,
+                                 &quot;MISPAR_ACHIM&quot; = &quot;Number of siblings&quot; ,&quot;SES_index&quot; = &quot;SES index&quot;,
+                                  &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;))</code></pre>
 <pre><code>## 
 ## ========================================================================
 ##                              Hebrew         Math           English      
 ## ------------------------------------------------------------------------
-## Diff-in-Diff                     0.006         -0.009         -0.010    
+## Diff-in-Diff                    -0.008         -0.010         -0.007    
 ##                                 (0.038)        (0.042)        (0.045)   
-## Sex                              0.287 ***     -0.133 ***      0.014    
+## Sex                              0.287 ***     -0.133 ***      0.013    
 ##                                 (0.009)        (0.010)        (0.009)   
-## Father&#39;s years of education      0.011 ***      0.015 ***      0.011 ***
+## Father&#39;s years of education      0.011 ***      0.015 ***      0.013 ***
 ##                                 (0.001)        (0.001)        (0.001)   
 ## Mother&#39;s years of education      0.018 ***      0.021 ***      0.018 ***
 ##                                 (0.001)        (0.002)        (0.002)   
+## Native indicator                 0.330 ***      0.099 ***     -0.242 ***
+##                                 (0.028)        (0.023)        (0.024)   
+## Number of siblings              -0.006          0.011 ***     -0.063 ***
+##                                 (0.004)        (0.004)        (0.004)   
+## SES index                       -0.070 ***      0.002         -0.023    
+##                                 (0.023)        (0.027)        (0.033)   
 ## Class size                       0.006 **      -0.001         -0.006 *  
 ##                                 (0.003)        (0.004)        (0.004)   
-## Native indicator                 0.346 ***      0.107 ***     -0.248 ***
-##                                 (0.027)        (0.022)        (0.024)   
 ## ------------------------------------------------------------------------
-## R^2                              0.158          0.200          0.183    
-## Adj. R^2                         0.147          0.189          0.173    
-## Num. obs.                    64693          64532          61219        
-## RMSE                             0.907          0.879          0.910    
+## R^2                              0.157          0.198          0.187    
+## Adj. R^2                         0.146          0.188          0.177    
+## Num. obs.                    64492          64313          61041        
+## RMSE                             0.905          0.879          0.907    
 ## N Clusters                     816            816            740        
 ## ========================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
@@ -603,29 +529,34 @@ final_df_arb &lt;- final.df %&gt;%
 <pre class="r"><code>screenreg(list(didreg.arb.fe.var.arb, didreg.mat.fe.var.arb, didreg.eng.fe.var.arb), 
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c(&quot;Arabic&quot;, &quot;Math&quot;, &quot;English&quot;),
           custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;, &quot;CODE_MIN&quot; = &quot;Sex&quot;, &quot;SHNOT_LIMUD_AV&quot; = &quot;Father&#39;s years of education&quot;,
-                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;, &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;,
-                                 &quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;))</code></pre>
+                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;,&quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;,
+                                 &quot;MISPAR_ACHIM&quot; = &quot;Number of siblings&quot; ,&quot;SES_index&quot; = &quot;SES index&quot;,
+                                  &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;))</code></pre>
 <pre><code>## 
 ## ========================================================================
 ##                              Arabic         Math           English      
 ## ------------------------------------------------------------------------
-## Diff-in-Diff                     0.218 **       0.129          0.117    
-##                                 (0.094)        (0.128)        (0.135)   
-## Sex                              0.500 ***      0.132 ***      0.237 ***
+## Diff-in-Diff                     0.208 **       0.104          0.106    
+##                                 (0.102)        (0.131)        (0.137)   
+## Sex                              0.506 ***      0.134 ***      0.244 ***
 ##                                 (0.014)        (0.015)        (0.015)   
-## Father&#39;s years of education     -0.002 *       -0.001          0.000    
+## Father&#39;s years of education     -0.002 *       -0.000         -0.000    
 ##                                 (0.001)        (0.001)        (0.001)   
-## Mother&#39;s years of education     -0.005 ***     -0.002         -0.000    
+## Mother&#39;s years of education     -0.005 ***     -0.001          0.000    
 ##                                 (0.001)        (0.002)        (0.001)   
-## Class size                       0.007          0.004         -0.007    
+## Native indicator                 0.063          0.030         -0.440 ***
+##                                 (0.110)        (0.102)        (0.108)   
+## Number of siblings              -0.036 ***     -0.020 ***     -0.034 ***
+##                                 (0.004)        (0.004)        (0.005)   
+## SES index                        0.003          0.004          0.057    
+##                                 (0.057)        (0.087)        (0.115)   
+## Class size                       0.008          0.005         -0.006    
 ##                                 (0.006)        (0.012)        (0.011)   
-## Native indicator                 0.041         -0.035         -0.397 ***
-##                                 (0.111)        (0.103)        (0.097)   
 ## ------------------------------------------------------------------------
-## R^2                              0.217          0.212          0.199    
-## Adj. R^2                         0.209          0.204          0.191    
-## Num. obs.                    25960          25860          25613        
-## RMSE                             0.887          0.854          0.871    
+## R^2                              0.220          0.214          0.202    
+## Adj. R^2                         0.212          0.206          0.193    
+## Num. obs.                    25899          25797          25568        
+## RMSE                             0.885          0.853          0.870    
 ## N Clusters                     251            252            252        
 ## ========================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
@@ -637,16 +568,12 @@ final_df_arb &lt;- final.df %&gt;%
 <p>Because almost all observation in the north and south regions took part in the program, I will check only the difference in the other regions.</p>
 <p><img src="images/Not%20Periphery%20-%20jewish%20sector.png" /></p>
 <p><br></p>
-<p><img src="images/Not%20Periphery%20-%20Arab%20sector.png" /></p>
-<p><br></p>
 <div id="split-the-data-by-regions-periphery-0-and-rest-1" class="section level3">
 <h3>Split the data by regions periphery (“0”) and rest (“1”)</h3>
-<pre class="r"><code>final.df$CODE_MACHOZ_GEOGRAFI &lt;- ifelse(final.df$CODE_MACHOZ_GEOGRAFI == &quot;2&quot; | final.df$CODE_MACHOZ_GEOGRAFI == &quot;6&quot;, &quot;0&quot;, &quot;1&quot;)
-
-final.df_periphery &lt;- final.df %&gt;%
-  filter(CODE_MACHOZ_GEOGRAFI == &quot;0&quot;)
-final.df_rest &lt;- final.df %&gt;%
-  filter(CODE_MACHOZ_GEOGRAFI == &quot;1&quot;)</code></pre>
+<pre class="r"><code>final.df_periphery &lt;- finald %&gt;%
+  filter(mahoz_ind == &quot;1&quot;)
+final.df_rest &lt;- finald %&gt;%
+  filter(mahoz_ind == &quot;0&quot;)</code></pre>
 </div>
 <div id="split-final.df_rest-by-sector" class="section level3">
 <h3>Split final.df_rest by sector</h3>
@@ -657,23 +584,23 @@ final.df_rest.arb &lt;- final.df_rest %&gt;%
 </div>
 <div id="table-of-observations-per-region" class="section level3">
 <h3>Table of observations per region</h3>
-<pre class="r"><code>region_tbl &lt;- table(final.df$CODE_MACHOZ_GEOGRAFI)
+<pre class="r"><code>region_tbl &lt;- table(finald$mahoz_ind)
 names(region_tbl)[1]&lt;-paste(&quot;Periphery&quot;)
 names(region_tbl)[2]&lt;-paste(&quot;Rest&quot;)
 region_tbl</code></pre>
 <pre><code>## Periphery      Rest 
-##     49903     77612</code></pre>
+##     77612     49903</code></pre>
 </div>
 <div id="table-of-observations-per-region-per-sector" class="section level3">
 <h3>Table of observations per region per sector</h3>
-<pre class="r"><code>region_sectore_table &lt;- table(final.df$CODE_MACHOZ_GEOGRAFI, final.df$CODE_MIGZAR)
+<pre class="r"><code>region_sectore_table &lt;- table(finald$mahoz_ind, finald$CODE_MIGZAR)
 rownames(region_sectore_table) &lt;- c(&quot;Periphery&quot;, &quot;Rest&quot; )
 colnames(region_sectore_table) &lt;- c(&quot;Jewish&quot;, &quot;Arab&quot; )
 region_sectore_table</code></pre>
 <pre><code>##            
 ##             Jewish  Arab
-##   Periphery  25028 24875
-##   Rest       65920 11692</code></pre>
+##   Periphery  65920 11692
+##   Rest       25028 24875</code></pre>
 </div>
 </div>
 <div id="simple-did-regression-on-rest-regions-by-sectores" class="section level1">
@@ -779,29 +706,34 @@ region_sectore_table</code></pre>
 <pre class="r"><code>screenreg(list(didreg.heb.fe.var.jew.rest, didreg.mat.fe.var.jew.rest, didreg.eng.fe.var.jew.rest), 
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c(&quot;Hebrew&quot;, &quot;Math&quot;, &quot;English&quot;),
           custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;, &quot;CODE_MIN&quot; = &quot;Sex&quot;, &quot;SHNOT_LIMUD_AV&quot; = &quot;Father&#39;s years of education&quot;,
-                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;, &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;,
-                                 &quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;))</code></pre>
+                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;,&quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;,
+                                 &quot;MISPAR_ACHIM&quot; = &quot;Number of siblings&quot; ,&quot;SES_index&quot; = &quot;SES index&quot;,
+                                  &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;))</code></pre>
 <pre><code>## 
 ## ========================================================================
 ##                              Hebrew         Math           English      
 ## ------------------------------------------------------------------------
-## Diff-in-Diff                     0.094 *        0.101 *       -0.008    
-##                                 (0.050)        (0.053)        (0.050)   
-## Sex                              0.267 ***     -0.143 ***      0.012    
+## Diff-in-Diff                     0.093 *        0.100 *       -0.007    
+##                                 (0.050)        (0.054)        (0.049)   
+## Sex                              0.268 ***     -0.142 ***      0.012    
 ##                                 (0.010)        (0.011)        (0.011)   
-## Father&#39;s years of education      0.011 ***      0.016 ***      0.013 ***
+## Father&#39;s years of education      0.011 ***      0.016 ***      0.014 ***
 ##                                 (0.001)        (0.001)        (0.001)   
-## Mother&#39;s years of education      0.018 ***      0.021 ***      0.021 ***
+## Mother&#39;s years of education      0.018 ***      0.022 ***      0.020 ***
 ##                                 (0.002)        (0.002)        (0.002)   
-## Class size                       0.006         -0.004         -0.006    
+## Native indicator                 0.306 ***      0.103 ***     -0.236 ***
+##                                 (0.031)        (0.027)        (0.028)   
+## Number of siblings              -0.005          0.012 ***     -0.062 ***
+##                                 (0.005)        (0.004)        (0.005)   
+## SES index                       -0.080 ***     -0.022          0.005    
+##                                 (0.025)        (0.030)        (0.036)   
+## Class size                       0.005         -0.004         -0.006    
 ##                                 (0.003)        (0.005)        (0.005)   
-## Native indicator                 0.326 ***      0.110 ***     -0.241 ***
-##                                 (0.031)        (0.026)        (0.028)   
 ## ------------------------------------------------------------------------
-## R^2                              0.161          0.204          0.180    
-## Adj. R^2                         0.151          0.194          0.170    
-## Num. obs.                    46435          46268          44679        
-## RMSE                             0.889          0.872          0.904    
+## R^2                              0.159          0.202          0.184    
+## Adj. R^2                         0.148          0.192          0.174    
+## Num. obs.                    46247          46062          44531        
+## RMSE                             0.887          0.872          0.901    
 ## N Clusters                     577            577            519        
 ## ========================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
@@ -814,29 +746,34 @@ region_sectore_table</code></pre>
 <pre class="r"><code>screenreg(list(didreg.arb.fe.var.arb.rest, didreg.mat.fe.var.arb.rest, didreg.eng.fe.var.arb.rest), 
           include.ci = F, stars = c(.1, .05, .01), digits = 3, custom.model.names = c(&quot;Arabic&quot;, &quot;Math&quot;, &quot;English&quot;),
           custom.coef.map = list(&quot;did&quot; = &quot;Diff-in-Diff&quot;, &quot;CODE_MIN&quot; = &quot;Sex&quot;, &quot;SHNOT_LIMUD_AV&quot; = &quot;Father&#39;s years of education&quot;,
-                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;, &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;,
-                                 &quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;))</code></pre>
+                                 &quot;SHNOT_LIMUD_EM&quot; = &quot;Mother&#39;s years of education&quot;,&quot;erets_leda_ISR&quot; = &quot;Native indicator&quot;,
+                                 &quot;MISPAR_ACHIM&quot; = &quot;Number of siblings&quot; ,&quot;SES_index&quot; = &quot;SES index&quot;,
+                                  &quot;mean_kids_per_class_by_school_year&quot; = &quot;Class size&quot;))</code></pre>
 <pre><code>## 
 ## =====================================================================
 ##                              Arabic        Math          English     
 ## ---------------------------------------------------------------------
-## Diff-in-Diff                    0.391 ***     0.391         0.177    
-##                                (0.137)       (0.271)       (0.226)   
-## Sex                             0.455 ***     0.088 ***     0.202 ***
-##                                (0.019)       (0.019)       (0.024)   
+## Diff-in-Diff                    0.375 ***     0.346         0.228    
+##                                (0.130)       (0.262)       (0.297)   
+## Sex                             0.463 ***     0.093 ***     0.212 ***
+##                                (0.019)       (0.020)       (0.024)   
 ## Father&#39;s years of education    -0.000        -0.000         0.001    
 ##                                (0.002)       (0.002)       (0.002)   
-## Mother&#39;s years of education    -0.005 **      0.000         0.002    
+## Mother&#39;s years of education    -0.005 *       0.001         0.003    
 ##                                (0.002)       (0.003)       (0.002)   
-## Class size                      0.016         0.013        -0.000    
+## Native indicator                0.090         0.142        -0.477 ** 
+##                                (0.145)       (0.124)       (0.188)   
+## Number of siblings             -0.046 ***    -0.026 ***    -0.051 ***
+##                                (0.006)       (0.008)       (0.007)   
+## SES index                       0.075         0.141         0.095    
+##                                (0.089)       (0.187)       (0.239)   
+## Class size                      0.016         0.012         0.002    
 ##                                (0.012)       (0.019)       (0.016)   
-## Native indicator                0.118         0.159        -0.375 ** 
-##                                (0.146)       (0.113)       (0.164)   
 ## ---------------------------------------------------------------------
-## R^2                             0.196         0.179         0.169    
-## Adj. R^2                        0.187         0.170         0.160    
-## Num. obs.                    8276          8326          8205        
-## RMSE                            0.866         0.858         0.879    
+## R^2                             0.201         0.181         0.173    
+## Adj. R^2                        0.192         0.172         0.164    
+## Num. obs.                    8261          8310          8171        
+## RMSE                            0.863         0.857         0.877    
 ## N Clusters                     78            78            78        
 ## =====================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
