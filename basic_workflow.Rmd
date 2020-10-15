@@ -25,7 +25,57 @@ Model 2: DiD with school and year fixed effects
 Model 3: DiD with school and year fixed effects and additional variables 
 
 
+```{r include=FALSE}
+getwd()
+final <- read.csv("final.csv")
+```
+
+
+```{r include=FALSE}
+final$CODE_MIGZAR  <- ifelse(final$CODE_MIGZAR == "1", "0", "1")
+
+final_jew <- final %>% 
+  filter(CODE_MIGZAR == "0")
+
+final_arb <- final %>% 
+  filter(CODE_MIGZAR == "1")
+```
+
+
 ### 1. Using computers in language classes 
+
+```{r}
+## DiD regression with clustered SE - Jewish sector
+
+didreg.lang.jew <- lm_robust(Lang ~ treat + after + did,
+                            data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.jew.fe <- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.jew.fe.vars <- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+## DiD regression with clustered SE - Jewish sector
+
+didreg.lang.arb <- lm_robust(Lang ~ treat + after + did,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.arb.fe <- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.arb.fe.vars <- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+
 ```{r}
 screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, didreg.lang.arb, didreg.lang.arb.fe, didreg.lang.arb.fe.vars),
           custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
