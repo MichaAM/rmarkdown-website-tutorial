@@ -302,9 +302,10 @@ $(document).ready(function () {
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>In this analysis there are 3 models for each school-learning environment analysis: Model 1: General DiD with clustered SE at school level Model 2: DiD with school and year fixed effects Model 3: DiD with school and year fixed effects and additional variables</p>
+<p>In this analysis there are 3 models for each school-learning environment analysis: 1. Model 1: General DiD with clustered SE at school level 2. Model 2: DiD with school and year fixed effects 3. Model 3: DiD with school and year fixed effects and additional variables</p>
 <div id="using-computers-in-language-classes" class="section level3">
 <h3>1. Using computers in language classes</h3>
+<p><strong>Q: “Do you use a computer during language lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.lang.jew &lt;- lm_robust(Lang ~ treat + after + did,
                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -315,7 +316,7 @@ didreg.lang.jew.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT
 didreg.lang.jew.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                      SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                 data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.lang.arb &lt;- lm_robust(Lang ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -372,6 +373,7 @@ didreg.lang.arb.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 </div>
 <div id="using-computers-in-english-classes" class="section level3">
 <h3>2. Using computers in English classes</h3>
+<p><strong>Q: “Do you use a computer during English lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.English.jew &lt;- lm_robust(English ~ treat + after + did,
                              data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -382,7 +384,7 @@ didreg.English.jew.fe &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD
 didreg.English.jew.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                      data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.English.arb &lt;- lm_robust(English ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -439,6 +441,7 @@ didreg.English.arb.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMU
 </div>
 <div id="using-computers-in-math-classes" class="section level3">
 <h3>3. Using computers in Math classes</h3>
+<p><strong>Q: “Do you use a computer during Math lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.Math.jew &lt;- lm_robust(Math ~ treat + after + did,
                                 data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -449,7 +452,7 @@ didreg.Math.jew.fe &lt;- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT
 didreg.Math.jew.fe.vars &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                           SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                         data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.Math.arb &lt;- lm_robust(Math ~ treat + after + did,
                                 data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -506,6 +509,7 @@ didreg.Math.arb.fe.vars &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 </div>
 <div id="using-computers-in-tech-classes" class="section level3">
 <h3>4. Using computers in Tech classes</h3>
+<p><strong>Q: “Do you use a computer during Tech or Science lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.Tech.jew &lt;- lm_robust(Tech ~ treat + after + did,
                              data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -516,7 +520,7 @@ didreg.Tech.jew.fe &lt;- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT
 didreg.Tech.jew.fe.vars &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                      data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.Tech.arb &lt;- lm_robust(Tech ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -573,6 +577,7 @@ didreg.Tech.arb.fe.vars &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 </div>
 <div id="schools-website-awareness" class="section level3">
 <h3>5. School’s Website awareness</h3>
+<p><strong>Q: “Does the school have an internet site?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.website.jew &lt;- lm_robust(dummy_yes_no_website ~ treat + after + did,
                              data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -583,7 +588,7 @@ didreg.website.jew.fe &lt;- lm_robust(dummy_yes_no_website ~ did, fixed_effects 
 didreg.website.jew.fe.vars &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                      data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.website.arb &lt;- lm_robust(dummy_yes_no_website ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -640,6 +645,7 @@ didreg.website.arb.fe.vars &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN
 </div>
 <div id="schools-website-download" class="section level3">
 <h3>6. School’s Website Download</h3>
+<p><strong>Q: “Have you downloaded study materials, such as homework, summaries, tests, from the school website?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.download.jew &lt;- lm_robust(dummy_yes_no_download ~ treat + after + did,
                                 data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -650,7 +656,7 @@ didreg.download.jew.fe &lt;- lm_robust(dummy_yes_no_download ~ did, fixed_effect
 didreg.download.jew.fe.vars &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                           SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                         data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.download.arb &lt;- lm_robust(dummy_yes_no_download ~ treat + after + did,
                                 data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -707,6 +713,7 @@ didreg.download.arb.fe.vars &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_M
 </div>
 <div id="schools-website-upload" class="section level3">
 <h3>7. School’s Website Upload</h3>
+<p><strong>Q: “Have you uploaded study materials, such as homework, summaries, tests, to the school website?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.upload.jew &lt;- lm_robust(dummy_yes_no_upload ~ treat + after + did,
                                  data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -717,7 +724,7 @@ didreg.upload.jew.fe &lt;- lm_robust(dummy_yes_no_upload ~ did, fixed_effects = 
 didreg.upload.jew.fe.vars &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                            SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                          data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.upload.arb &lt;- lm_robust(dummy_yes_no_upload ~ treat + after + did,
                                  data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -774,6 +781,7 @@ didreg.upload.arb.fe.vars &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN +
 </div>
 <div id="schoolsclasss-forum" class="section level3">
 <h3>8. School’s/class’s forum</h3>
+<p><strong>Q: “Have you participated in online school discussion groups on academic topics?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.forum.jew &lt;- lm_robust(dummy_yes_no_forum ~ treat + after + did,
                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -784,7 +792,7 @@ didreg.forum.jew.fe &lt;- lm_robust(dummy_yes_no_forum ~ did, fixed_effects = ~C
 didreg.forum.jew.fe.vars &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                          SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                        data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.forum.arb &lt;- lm_robust(dummy_yes_no_forum ~ treat + after + did,
                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -841,6 +849,7 @@ didreg.forum.arb.fe.vars &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + S
 </div>
 <div id="general-school-satisfaction-indicator" class="section level3">
 <h3>9. General school satisfaction Indicator</h3>
+<p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “I feel good at school”</strong> <strong>Q: “I love being in school”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.feel.jew &lt;- lm_robust(feel_index ~ treat + after + did,
                               data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -851,7 +860,7 @@ didreg.feel.jew.fe &lt;- lm_robust(feel_index ~ did, fixed_effects = ~CODE_MOSAD
 didreg.feel.jew.fe.vars &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                         SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                       data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.feel.arb &lt;- lm_robust(feel_index ~ treat + after + did,
                               data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
@@ -908,6 +917,7 @@ didreg.feel.arb.fe.vars &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMU
 </div>
 <div id="studentteacher-relations-indicator" class="section level3">
 <h3>10. Student–teacher relations Indicator</h3>
+<p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.behave.jew &lt;- lm_robust(behave_index ~ treat + after + did,
                              data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -918,7 +928,7 @@ didreg.behave.jew.fe &lt;- lm_robust(behave_index ~ did, fixed_effects = ~CODE_M
 didreg.behave.jew.fe.vars &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                      data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
-<p>DiD regression with clustered SE - Jewish sector</p>
+<p>DiD regression with clustered SE - Arab sector</p>
 <pre class="r"><code>didreg.behave.arb &lt;- lm_robust(behave_index ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 

@@ -20,9 +20,9 @@ library(estimatr)
 
 ## Introduction
 In this analysis there are 3 models for each school-learning environment analysis: 
-Model 1: General DiD with clustered SE at school level 
-Model 2: DiD with school and year fixed effects 
-Model 3: DiD with school and year fixed effects and additional variables 
+1. Model 1: General DiD with clustered SE at school level 
+2. Model 2: DiD with school and year fixed effects 
+3. Model 3: DiD with school and year fixed effects and additional variables 
 
 
 ```{r include=FALSE}
@@ -44,6 +44,8 @@ final_arb <- final %>%
 
 ### 1. Using computers in language classes 
 
+**Q: "Do you use a computer during language lessons?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -60,7 +62,7 @@ didreg.lang.jew.fe.vars <- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SH
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.lang.arb <- lm_robust(Lang ~ treat + after + did,
@@ -88,6 +90,9 @@ screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, did
 
 ### 2. Using computers in English classes 
 
+**Q: "Do you use a computer during English lessons?"**
+
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -104,7 +109,7 @@ didreg.English.jew.fe.vars <- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_E
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.English.arb <- lm_robust(English ~ treat + after + did,
@@ -132,6 +137,8 @@ screenreg(list(didreg.English.jew, didreg.English.jew.fe, didreg.English.jew.fe.
 
 ### 3. Using computers in Math classes 
 
+**Q: "Do you use a computer during Math lessons?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -148,7 +155,7 @@ didreg.Math.jew.fe.vars <- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SH
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.Math.arb <- lm_robust(Math ~ treat + after + did,
@@ -175,6 +182,8 @@ screenreg(list(didreg.Math.jew, didreg.Math.jew.fe, didreg.Math.jew.fe.vars, did
 
 ### 4. Using computers in Tech classes 
 
+**Q: "Do you use a computer during Tech or Science lessons?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -192,7 +201,7 @@ didreg.Tech.jew.fe.vars <- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SH
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.Tech.arb <- lm_robust(Tech ~ treat + after + did,
@@ -220,6 +229,8 @@ screenreg(list(didreg.Tech.jew, didreg.Tech.jew.fe, didreg.Tech.jew.fe.vars, did
 
 ### 5. School's Website awareness 
 
+**Q: "Does the school have an internet site?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -237,7 +248,7 @@ didreg.website.jew.fe.vars <- lm_robust(dummy_yes_no_website ~ did + CODE_MIN + 
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.website.arb <- lm_robust(dummy_yes_no_website ~ treat + after + did,
@@ -265,6 +276,8 @@ screenreg(list(didreg.website.jew, didreg.website.jew.fe, didreg.website.jew.fe.
 
 ### 6. School's Website Download  
 
+**Q: "Have you downloaded study materials, such as homework, summaries, tests, from the school website?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -282,7 +295,7 @@ didreg.download.jew.fe.vars <- lm_robust(dummy_yes_no_download ~ did + CODE_MIN 
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.download.arb <- lm_robust(dummy_yes_no_download ~ treat + after + did,
@@ -308,6 +321,8 @@ screenreg(list(didreg.download.jew, didreg.download.jew.fe, didreg.download.jew.
 
 ### 7. School's Website Upload  
 
+**Q: "Have you uploaded study materials, such as homework, summaries, tests, to the school website?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -325,7 +340,7 @@ didreg.upload.jew.fe.vars <- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN + SH
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.upload.arb <- lm_robust(dummy_yes_no_upload ~ treat + after + did,
@@ -353,6 +368,8 @@ screenreg(list(didreg.upload.jew, didreg.upload.jew.fe, didreg.upload.jew.fe.var
 
 ### 8. School's/class's forum  
 
+**Q: "Have you participated in online school discussion groups on academic topics?"**
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -370,7 +387,7 @@ didreg.forum.jew.fe.vars <- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + SHNO
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.forum.arb <- lm_robust(dummy_yes_no_forum ~ treat + after + did,
@@ -399,6 +416,12 @@ screenreg(list(didreg.forum.jew, didreg.forum.jew.fe, didreg.forum.jew.fe.vars, 
 
 ### 9. General school satisfaction Indicator   
 
+The General school satisfaction Indicator consists of the average of the answers to the following questions: 
+**Q: "I feel good at school"** 
+**Q: "I love being in school"**
+
+
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -416,7 +439,7 @@ didreg.feel.jew.fe.vars <- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMUD_E
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.feel.arb <- lm_robust(feel_index ~ treat + after + did,
@@ -444,6 +467,14 @@ screenreg(list(didreg.feel.jew, didreg.feel.jew.fe, didreg.feel.jew.fe.vars, did
 
 ### 10. Student–teacher relations Indicator   
 
+The General school satisfaction Indicator consists of the average of the answers to the following questions: 
+**Q: "The students in my class treat teachers with respect"** 
+**Q: "Students often make noise and commotion in the classroom and impair the learning of other students"**
+**Q: "In my class there are students who are rude to teachers"** 
+**Q: "Teachers have to wait a long time at the beginning of the lesson until the students stop making noise"** 
+
+
+
 DiD regression with clustered SE - Jewish sector
 
 ```{r}
@@ -461,7 +492,7 @@ didreg.behave.jew.fe.vars <- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_LIM
 
 ```
 
-DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Arab sector
 
 ```{r}
 didreg.behave.arb <- lm_robust(behave_index ~ treat + after + did,
