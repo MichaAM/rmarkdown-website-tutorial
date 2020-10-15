@@ -1,15 +1,14 @@
 name: "R Markdown Thesis results"
 navbar:
-  title: "HOME"
+  title: "Micha's Thesis"
   left:
-    - text: "Thesis results"
+    - text: "Grades"
       href: first_observations.html
-    - text: "Basic Workflow"
+    - text: "Learning environment"
       href: basic_workflow.html
     - text: "Getting Sophisticated"
       href: getting_sophisticated.html
-    - text: "Your Turn"
-      href: your_turn.html
+ 
 output_dir: "."
 output:
   html_document:
