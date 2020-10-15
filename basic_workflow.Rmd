@@ -44,8 +44,9 @@ final_arb <- final %>%
 
 ### 1. Using computers in language classes 
 
+DiD regression with clustered SE - Jewish sector
+
 ```{r}
-## DiD regression with clustered SE - Jewish sector
 
 didreg.lang.jew <- lm_robust(Lang ~ treat + after + did,
                             data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
@@ -57,9 +58,11 @@ didreg.lang.jew.fe.vars <- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SH
                                      SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                 data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
 
+```
 
-## DiD regression with clustered SE - Jewish sector
+DiD regression with clustered SE - Jewish sector
 
+```{r}
 didreg.lang.arb <- lm_robust(Lang ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
 
@@ -70,11 +73,9 @@ didreg.lang.arb.fe.vars <- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SH
                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                      data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
 
-
 ```
 
-
-
+Combined results table 
 
 ```{r}
 screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, didreg.lang.arb, didreg.lang.arb.fe, didreg.lang.arb.fe.vars),
@@ -83,4 +84,151 @@ screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, did
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 ```
+
+
+### 2. Using computers in English classes 
+
+DiD regression with clustered SE - Jewish sector
+
+```{r}
+
+didreg.English.jew <- lm_robust(English ~ treat + after + did,
+                             data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.jew.fe <- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.jew.fe.vars <- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+```
+
+DiD regression with clustered SE - Jewish sector
+
+```{r}
+didreg.English.arb <- lm_robust(English ~ treat + after + did,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.arb.fe <- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.arb.fe.vars <- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+```
+
+Combined results table 
+
+```{r}
+
+screenreg(list(didreg.English.jew, didreg.English.jew.fe, didreg.English.jew.fe.vars, didreg.English.arb, didreg.English.arb.fe, didreg.English.arb.fe.vars),
+          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c("Intercept", "Treat", "After", "Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education",
+                                "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+```
+
+### 3. Using computers in Math classes 
+
+DiD regression with clustered SE - Jewish sector
+
+```{r}
+
+didreg.Math.jew <- lm_robust(Math ~ treat + after + did,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.jew.fe <- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                   data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.jew.fe.vars <- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                          SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                        data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+```
+
+DiD regression with clustered SE - Jewish sector
+
+```{r}
+didreg.Math.arb <- lm_robust(Math ~ treat + after + did,
+                                data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.arb.fe <- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                   data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.arb.fe.vars <- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                        data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+```
+
+Combined results table 
+
+```{r}
+
+screenreg(list(didreg.Math.jew, didreg.Math.jew.fe, didreg.Math.jew.fe.vars, didreg.Math.arb, didreg.Math.arb.fe, didreg.Math.arb.fe.vars),
+          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c("Intercept", "Treat", "After", "Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education",
+                                "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+```
+
+### 4. Using computers in Tech classes 
+
+DiD regression with clustered SE - Jewish sector
+
+```{r}
+
+didreg.Tech.jew <- lm_robust(Tech ~ treat + after + did,
+                             data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.jew.fe <- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.jew.fe.vars <- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+DiD regression with clustered SE - Jewish sector
+
+```{r}
+didreg.Tech.arb <- lm_robust(Tech ~ treat + after + did,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.arb.fe <- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.arb.fe.vars <- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+```
+
+Combined results table 
+
+```{r}
+
+screenreg(list(didreg.Tech.jew, didreg.Tech.jew.fe, didreg.Tech.jew.fe.vars, didreg.Tech.arb, didreg.Tech.arb.fe, didreg.Tech.arb.fe.vars),
+          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c("Intercept", "Treat", "After", "Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education",
+                                "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

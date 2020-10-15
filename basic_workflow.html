@@ -305,9 +305,8 @@ $(document).ready(function () {
 <p>In this analysis there are 3 models for each school-learning environment analysis: Model 1: General DiD with clustered SE at school level Model 2: DiD with school and year fixed effects Model 3: DiD with school and year fixed effects and additional variables</p>
 <div id="using-computers-in-language-classes" class="section level3">
 <h3>1. Using computers in language classes</h3>
-<pre class="r"><code>## DiD regression with clustered SE - Jewish sector
-
-didreg.lang.jew &lt;- lm_robust(Lang ~ treat + after + did,
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.lang.jew &lt;- lm_robust(Lang ~ treat + after + did,
                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
 didreg.lang.jew.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
@@ -315,12 +314,9 @@ didreg.lang.jew.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT
 
 didreg.lang.jew.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                      SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-
-## DiD regression with clustered SE - Jewish sector
-
-didreg.lang.arb &lt;- lm_robust(Lang ~ treat + after + did,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.lang.arb &lt;- lm_robust(Lang ~ treat + after + did,
                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
 
 didreg.lang.arb.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
@@ -329,6 +325,7 @@ didreg.lang.arb.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT
 didreg.lang.arb.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                      data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Combined results table</p>
 <pre class="r"><code>screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, didreg.lang.arb, didreg.lang.arb.fe, didreg.lang.arb.fe.vars),
           custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
           custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
@@ -370,6 +367,73 @@ didreg.lang.arb.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 ## Num. obs.                    2390          2390        2381         989          989       988        
 ## RMSE                            0.226         0.192       0.192       0.232        0.198     0.197    
 ## N Clusters                    743           743         742         252          252       252        
+## ======================================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="using-computers-in-language-classes-1" class="section level3">
+<h3>1. Using computers in language classes</h3>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.English.jew &lt;- lm_robust(English ~ treat + after + did,
+                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.English.jew.fe &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.English.jew.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.English.arb &lt;- lm_robust(English ~ treat + after + did,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.English.arb.fe &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.English.arb.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                     data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Combined results table</p>
+<pre class="r"><code>screenreg(list(didreg.English.jew, didreg.English.jew.fe, didreg.English.jew.fe.vars, didreg.English.arb, didreg.English.arb.fe, didreg.English.arb.fe.vars),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ======================================================================================================
+##                                          Jewish sector                          Arab sector           
+##                              -------------------------------------  ----------------------------------
+##                              Model 1       Model 2    Model 3       Model 1      Model 2   Model 3    
+## ------------------------------------------------------------------------------------------------------
+## Intercept                       0.148 ***                             0.060 ***                       
+##                                (0.012)                               (0.008)                          
+## Treat                          -0.007                                 0.010                           
+##                                (0.016)                               (0.011)                          
+## After                           0.282 ***                             0.336 ***                       
+##                                (0.020)                               (0.030)                          
+## Reform DiD                      0.019         0.028      0.040        0.064 *      0.002     0.011    
+##                                (0.027)       (0.042)    (0.042)      (0.035)      (0.057)   (0.059)   
+## Male indicator                                           0.025                              -0.088    
+##                                                         (0.027)                             (0.101)   
+## Mother&#39;s years of education                             -0.008                              -0.009    
+##                                                         (0.007)                             (0.007)   
+## Father&#39;s years of education                             -0.001                              -0.004    
+##                                                         (0.007)                             (0.006)   
+## Number of siblings                                       0.000                               0.004    
+##                                                         (0.025)                             (0.031)   
+## Native indicator                                         0.067                              -0.139    
+##                                                         (0.135)                             (0.603)   
+## SES index                                                0.031                              -0.005    
+##                                                         (0.023)                             (0.037)   
+## Class size                                               0.003                              -0.006 ** 
+##                                                         (0.002)                             (0.003)   
+## School age                                              -0.015 ***                          -0.004 ***
+##                                                         (0.002)                             (0.001)   
+## ------------------------------------------------------------------------------------------------------
+## R^2                             0.237         0.628      0.633        0.375        0.664     0.672    
+## Adj. R^2                        0.236         0.459      0.464        0.373        0.548     0.553    
+## Num. obs.                    2390          2390       2381          989          989       988        
+## RMSE                            0.245         0.206      0.205        0.232        0.197     0.196    
+## N Clusters                    743           743        742          252          252       252        
 ## ======================================================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
 </div>
