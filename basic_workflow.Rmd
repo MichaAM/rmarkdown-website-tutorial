@@ -30,7 +30,7 @@ getwd()
 final <- read.csv("final.csv")
 ```
 
-## Dependent variables description in the following analysis: 
+## Dependent variables description: 
 Questions 1-4 : The choices in the questionnaire presented 3 possible answers: 1- Often, 2- Rarely or 3- Not at all.
 I created a new dummy variable that takes "1" for "often" and "0" for rest. 
 
@@ -51,6 +51,8 @@ For the Student misbehavior in class indicator I averaged 2 the answers of the f
 The choices in the questionnaire presented 5 possible answers: 1- Agree to 5- Disagree
 
 I standardized the answers grad using z score with yearly average. 
+
+
 
 
 # **Analysis by sector**
@@ -112,6 +114,8 @@ screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, did
 ```
 
 
+
+
 ### 2. Using computers in English classes 
 
 **Q: "Do you use a computer during English lessons?"**
@@ -159,6 +163,8 @@ screenreg(list(didreg.English.jew, didreg.English.jew.fe, didreg.English.jew.fe.
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 ```
 
+
+
 ### 3. Using computers in Math classes 
 
 **Q: "Do you use a computer during Math lessons?"**
@@ -203,6 +209,8 @@ screenreg(list(didreg.Math.jew, didreg.Math.jew.fe, didreg.Math.jew.fe.vars, did
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 ```
+
+
 
 ### 4. Using computers in Tech classes 
 
@@ -249,6 +257,8 @@ screenreg(list(didreg.Tech.jew, didreg.Tech.jew.fe, didreg.Tech.jew.fe.vars, did
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 ```
+
+
 
 
 ### 5. School's Website awareness 
@@ -298,6 +308,7 @@ screenreg(list(didreg.website.jew, didreg.website.jew.fe, didreg.website.jew.fe.
 ```
 
 
+
 ### 6. School's Website Download  
 
 **Q: "Have you downloaded study materials, such as homework, summaries, tests, from the school website?"**
@@ -342,6 +353,8 @@ screenreg(list(didreg.download.jew, didreg.download.jew.fe, didreg.download.jew.
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 ```
+
+
 
 ### 7. School's Website Upload  
 
@@ -390,6 +403,8 @@ screenreg(list(didreg.upload.jew, didreg.upload.jew.fe, didreg.upload.jew.fe.var
 
 ```
 
+
+
 ### 8. School's/class's forum  
 
 **Q: "Have you participated in online school discussion groups on academic topics?"**
@@ -436,6 +451,8 @@ screenreg(list(didreg.forum.jew, didreg.forum.jew.fe, didreg.forum.jew.fe.vars, 
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 
 ```
+
+
 
 
 ### 9. General school satisfaction Indicator   
@@ -489,6 +506,8 @@ screenreg(list(didreg.feel.jew, didreg.feel.jew.fe, didreg.feel.jew.fe.vars, did
 
 ```
 
+
+
 ### 10. Student misbehavior in class Indicator   
 
 The Student misbehavior in class Indicator consists of the average of the answers to the following questions: 
@@ -541,6 +560,10 @@ screenreg(list(didreg.behave.jew, didreg.behave.jew.fe, didreg.behave.jew.fe.var
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 ```
 
+
+
+
+
 # **Analysis by regions per sectors** 
 
 Split by region - Periphery vs Rest 
@@ -554,7 +577,8 @@ final_not_periphery <- final %>%
 ```
 
 
-Analysis of periphery region 
+
+###Analysis of periphery region 
 
 Split each Periphery vs Rest by sector
 ```{r}
@@ -567,7 +591,7 @@ final_peri_arb <- final_peri %>%
 ```
 
 
-Check ratio of treated vs untreated for each region
+###Check ratio of treated vs untreated for each region
 
 Periphery: ratio of Arab sector vs Jewish sector for periphery region
 ```{r}
@@ -576,7 +600,8 @@ row.names(peri_sector_treat_ratio_table) <- c("Jewish", "Arab")
 colnames(peri_sector_treat_ratio_table) <- c("Treated", "Untreated")
 peri_sector_treat_ratio_table
 ```
-* Only 143 classes out of 1812 from the periphery did not take part in the ICT program
+* Only 143 classes out of 1812 from the periphery took part in the ICT program
+
 
 Not periphery: ratio of Arab sector vs Jewish sector for not periphery region
 ```{r}
@@ -587,7 +612,8 @@ not_peri_sector_treat_ratio_table
 ```
 * Only 51 classes out of 412 Arab schools out of the periphery did not take part in the ICT program 
 
-# Not periphery schools learning environment analysis - **Jewish sectore only** 
+
+# Not periphery schools learning environment analysis - **Jewish sector only** 
 
 Split not_periphery by sectors 
 ```{r}
@@ -597,6 +623,8 @@ final_not_peri_jew <- final_not_periphery %>%
 final_not_peri_arb <- final_not_periphery %>%
   filter(CODE_MIGZAR == "1")
 ```
+
+
 
 ### 1. Using computers in language classes 
 
@@ -628,6 +656,7 @@ screenreg(list(didreg.lang.jew.not.peri, didreg.lang.jew.fe.not.peri, didreg.lan
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
 
 
 ### 2. Using computers in English classes 
@@ -662,6 +691,8 @@ screenreg(list(didreg.English.jew.not.peri, didreg.English.jew.fe.not.peri, didr
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
 
+
+
 ### 3. Using computers in Math classes 
 
 **Q: "Do you use a computer during Math lessons?"**
@@ -692,6 +723,9 @@ screenreg(list(didreg.Math.jew.not.peri, didreg.Math.jew.fe.not.peri, didreg.Mat
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
+
+
 ### 4. Using computers in Tech classes 
 
 **Q: "Do you use a computer during Tech or Science lessons?"**
@@ -723,6 +757,9 @@ screenreg(list(didreg.Tech.jew.not.peri, didreg.Tech.jew.fe.not.peri, didreg.Tec
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
 
+
+
+
 ### 5. School's Website awareness 
 
 **Q: "Does the school have an internet site?"**
@@ -753,6 +790,8 @@ screenreg(list(didreg.website.jew.not.peri, didreg.website.jew.fe.not.peri, didr
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
+
 
 ### 6. School's Website Download  
 
@@ -786,6 +825,8 @@ screenreg(list(didreg.Download.jew.not.peri, didreg.Download.jew.fe.not.peri, di
 ```
 
 
+
+
 ### 7. School's Website Upload  
 
 **Q: "Have you uploaded study materials, such as homework, summaries, tests, to the school website?"**
@@ -816,6 +857,9 @@ screenreg(list(didreg.upload.jew.not.peri, didreg.upload.jew.fe.not.peri, didreg
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
+
+
 ### 8. School's/class's forum  
 
 **Q: "Have you participated in online school discussion groups on academic topics?"**
@@ -846,6 +890,8 @@ screenreg(list(didreg.forum.jew.not.peri, didreg.forum.jew.fe.not.peri, didreg.f
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
+
 
 ### 9. General school satisfaction Indicator   
 
@@ -880,6 +926,9 @@ screenreg(list(didreg.feel_index.jew.not.peri, didreg.feel_index.jew.fe.not.peri
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
+
+
 
 ### 10. Student misbehavior in class Indicator   
 

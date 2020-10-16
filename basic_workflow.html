@@ -304,8 +304,8 @@ $(document).ready(function () {
 2. Model 2: DiD with school and year fixed effects<br />
 3. Model 3: DiD with school and year fixed effects and additional variables</p>
 </div>
-<div id="dependent-variables-description-in-the-following-analysis" class="section level2">
-<h2>Dependent variables description in the following analysis:</h2>
+<div id="dependent-variables-description" class="section level2">
+<h2>Dependent variables description:</h2>
 <p>Questions 1-4 : The choices in the questionnaire presented 3 possible answers: 1- Often, 2- Rarely or 3- Not at all. I created a new dummy variable that takes “1” for “often” and “0” for rest.</p>
 <p>Questions 4-8 : The choices in the questionnaire presented 3 possible answers: 1- Yes, 2- No or 3- Don’t Know Second, I created a new dummy variable that takes “1” for “Yes” and “0” for rest.</p>
 <p>Questions 9-10 : The 2 last question are indicators for General satisfaction from school and Student misbehavior in class. For the General satisfaction indicator I averaged 2 the answers of the following questions:<br />
@@ -1010,14 +1010,14 @@ didreg.behave.arb.fe.vars &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_
 
 final_not_periphery &lt;- final %&gt;%
   filter(CODE_MACHOZ_GEOGRAFI != &quot;2&quot; &amp; CODE_MACHOZ_GEOGRAFI != &quot;6&quot;)</code></pre>
-<p>Analysis of periphery region</p>
+<p>###Analysis of periphery region</p>
 <p>Split each Periphery vs Rest by sector</p>
 <pre class="r"><code>final_peri_jew &lt;- final_peri %&gt;%
   filter(CODE_MIGZAR == &quot;0&quot;)
 
 final_peri_arb &lt;- final_peri %&gt;%
   filter(CODE_MIGZAR == &quot;1&quot;)</code></pre>
-<p>Check ratio of treated vs untreated for each region</p>
+<p>###Check ratio of treated vs untreated for each region</p>
 <p>Periphery: ratio of Arab sector vs Jewish sector for periphery region</p>
 <pre class="r"><code>peri_sector_treat_ratio_table &lt;- table(final_peri$CODE_MIGZAR, final_peri$treat)
 row.names(peri_sector_treat_ratio_table) &lt;- c(&quot;Jewish&quot;, &quot;Arab&quot;)
@@ -1028,7 +1028,7 @@ peri_sector_treat_ratio_table</code></pre>
 ##   Jewish     116       811
 ##   Arab        27       858</code></pre>
 <ul>
-<li>Only 143 classes out of 1812 from the periphery did not take part in the ICT program</li>
+<li>Only 143 classes out of 1812 from the periphery took part in the ICT program</li>
 </ul>
 <p>Not periphery: ratio of Arab sector vs Jewish sector for not periphery region</p>
 <pre class="r"><code>not_peri_sector_treat_ratio_table &lt;- table(final_not_periphery$CODE_MIGZAR, final_not_periphery$treat)
@@ -1043,8 +1043,8 @@ not_peri_sector_treat_ratio_table</code></pre>
 <li>Only 51 classes out of 412 Arab schools out of the periphery did not take part in the ICT program</li>
 </ul>
 </div>
-<div id="not-periphery-schools-learning-environment-analysis---jewish-sectore-only" class="section level1">
-<h1>Not periphery schools learning environment analysis - <strong>Jewish sectore only</strong></h1>
+<div id="not-periphery-schools-learning-environment-analysis---jewish-sector-only" class="section level1">
+<h1>Not periphery schools learning environment analysis - <strong>Jewish sector only</strong></h1>
 <p>Split not_periphery by sectors</p>
 <pre class="r"><code>final_not_peri_jew &lt;- final_not_periphery %&gt;%
   filter(CODE_MIGZAR == &quot;0&quot;)
