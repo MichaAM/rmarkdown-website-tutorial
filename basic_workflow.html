@@ -300,6 +300,9 @@ $(document).ready(function () {
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
 <p>In this analysis there are 3 models for each school-learning environment analysis: 1. Model 1: General DiD with clustered SE at school level 2. Model 2: DiD with school and year fixed effects 3. Model 3: DiD with school and year fixed effects and additional variables</p>
+</div>
+<div id="analysis-by-sector" class="section level1">
+<h1><strong>Analysis by sector</strong></h1>
 <div id="using-computers-in-language-classes" class="section level3">
 <h3>1. Using computers in language classes</h3>
 <p><strong>Q: “Do you use a computer during language lessons?”</strong></p>
@@ -978,6 +981,636 @@ didreg.behave.arb.fe.vars &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_
 ## RMSE                            0.253         0.216      0.211         0.328         0.287      0.287  
 ## N Clusters                    743           743        743           252           252        252      
 ## =======================================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="analysis-by-regions-per-sectors" class="section level1">
+<h1><strong>Analysis by regions per sectors</strong></h1>
+<p>Split by region - Periphery vs Rest</p>
+<pre class="r"><code>final_peri &lt;- final %&gt;%
+  filter(CODE_MACHOZ_GEOGRAFI == &quot;2&quot; | CODE_MACHOZ_GEOGRAFI == &quot;6&quot;)
+
+final_not_periphery &lt;- final %&gt;%
+  filter(CODE_MACHOZ_GEOGRAFI != &quot;2&quot; &amp; CODE_MACHOZ_GEOGRAFI != &quot;6&quot;)</code></pre>
+<p>Analysis of periphery region</p>
+<p>Split each Periphery vs Rest by sector</p>
+<pre class="r"><code>final_peri_jew &lt;- final_peri %&gt;%
+  filter(CODE_MIGZAR == &quot;0&quot;)
+
+final_peri_arb &lt;- final_peri %&gt;%
+  filter(CODE_MIGZAR == &quot;1&quot;)</code></pre>
+<p>Check ratio of treated vs untreated for each region</p>
+<p>Periphery: ratio of Arab sector vs Jewish sector for periphery region</p>
+<pre class="r"><code>peri_sector_treat_ratio_table &lt;- table(final_peri$CODE_MIGZAR, final_peri$treat)
+row.names(peri_sector_treat_ratio_table) &lt;- c(&quot;Jewish&quot;, &quot;Arab&quot;)
+colnames(peri_sector_treat_ratio_table) &lt;- c(&quot;Treated&quot;, &quot;Untreated&quot;)
+peri_sector_treat_ratio_table</code></pre>
+<pre><code>##         
+##          Treated Untreated
+##   Jewish     116       811
+##   Arab        27       858</code></pre>
+<ul>
+<li>Only 143 classes out of 1812 from the periphery did not take part in the ICT program</li>
+</ul>
+<p>Not periphery: ratio of Arab sector vs Jewish sector for not periphery region</p>
+<pre class="r"><code>not_peri_sector_treat_ratio_table &lt;- table(final_not_periphery$CODE_MIGZAR, final_not_periphery$treat)
+row.names(not_peri_sector_treat_ratio_table) &lt;- c(&quot;Jewish&quot;, &quot;Arab&quot;)
+colnames(not_peri_sector_treat_ratio_table) &lt;- c(&quot;Treated&quot;, &quot;Untreated&quot;)
+not_peri_sector_treat_ratio_table</code></pre>
+<pre><code>##         
+##          Treated Untreated
+##   Jewish    1493       767
+##   Arab       361        51</code></pre>
+<ul>
+<li>Only 51 classes out of 412 Arab schools out of the periphery did not take part in the ICT program</li>
+</ul>
+</div>
+<div id="not-periphery-schools-learning-environment-analysis---jewish-sectore-only" class="section level1">
+<h1>Not periphery schools learning environment analysis - <strong>Jewish sectore only</strong></h1>
+<p>Split not_periphery by sectors</p>
+<pre class="r"><code>final_not_peri_jew &lt;- final_not_periphery %&gt;%
+  filter(CODE_MIGZAR == &quot;0&quot;)
+
+final_not_peri_arb &lt;- final_not_periphery %&gt;%
+  filter(CODE_MIGZAR == &quot;1&quot;)</code></pre>
+<div id="using-computers-in-language-classes-1" class="section level3">
+<h3>1. Using computers in language classes</h3>
+<p><strong>Q: “Do you use a computer during language lessons?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.lang.jew.not.peri &lt;- lm_robust(Lang ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.lang.jew.fe.not.peri &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.lang.jew.fe.vars.not.peri &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.lang.jew.not.peri, didreg.lang.jew.fe.not.peri, didreg.lang.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ===============================================================
+##                                         Jewish sector          
+##                              ----------------------------------
+##                              Model 1       Model 2    Model 3  
+## ---------------------------------------------------------------
+## Intercept                       0.158 ***                      
+##                                (0.012)                         
+## Treat                          -0.039 **                       
+##                                (0.018)                         
+## After                           0.301 ***                      
+##                                (0.017)                         
+## Reform DiD                      0.042         0.074      0.071 
+##                                (0.029)       (0.045)    (0.046)
+## Male indicator                                           0.041 
+##                                                         (0.031)
+## Mother&#39;s years of education                             -0.008 
+##                                                         (0.009)
+## Father&#39;s years of education                              0.003 
+##                                                         (0.008)
+## Number of siblings                                       0.010 
+##                                                         (0.029)
+## Native indicator                                        -0.010 
+##                                                         (0.149)
+## SES index                                                0.027 
+##                                                         (0.024)
+## Class size                                               0.003 
+##                                                         (0.002)
+## School age                                              -0.000 
+##                                                         (0.002)
+## ---------------------------------------------------------------
+## R^2                             0.293         0.643      0.645 
+## Adj. R^2                        0.292         0.480      0.480 
+## Num. obs.                    1672          1672       1666     
+## RMSE                            0.229         0.196      0.196 
+## N Clusters                    519           519        519     
+## ===============================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="using-computers-in-english-classes-1" class="section level3">
+<h3>2. Using computers in English classes</h3>
+<p><strong>Q: “Do you use a computer during English lessons?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.English.jew.not.peri &lt;- lm_robust(English ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.English.jew.fe.not.peri &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.English.jew.fe.vars.not.peri &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.English.jew.not.peri, didreg.English.jew.fe.not.peri, didreg.English.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ==================================================================
+##                                          Jewish sector            
+##                              -------------------------------------
+##                              Model 1       Model 2    Model 3     
+## ------------------------------------------------------------------
+## Intercept                       0.142 ***                         
+##                                (0.012)                            
+## Treat                          -0.025                             
+##                                (0.018)                            
+## After                           0.291 ***                         
+##                                (0.020)                            
+## Reform DiD                      0.026         0.027      0.029    
+##                                (0.031)       (0.049)    (0.048)   
+## Male indicator                                           0.059 *  
+##                                                         (0.030)   
+## Mother&#39;s years of education                             -0.008    
+##                                                         (0.008)   
+## Father&#39;s years of education                             -0.003    
+##                                                         (0.008)   
+## Number of siblings                                       0.007    
+##                                                         (0.030)   
+## Native indicator                                         0.046    
+##                                                         (0.159)   
+## SES index                                                0.027    
+##                                                         (0.026)   
+## Class size                                               0.005 ** 
+##                                                         (0.003)   
+## School age                                              -0.015 ***
+##                                                         (0.002)   
+## ------------------------------------------------------------------
+## R^2                             0.253         0.641      0.649    
+## Adj. R^2                        0.251         0.477      0.485    
+## Num. obs.                    1672          1672       1666        
+## RMSE                            0.241         0.201      0.199    
+## N Clusters                    519           519        519        
+## ==================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="using-computers-in-math-classes-1" class="section level3">
+<h3>3. Using computers in Math classes</h3>
+<p><strong>Q: “Do you use a computer during Math lessons?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.Math.jew.not.peri &lt;- lm_robust(Math ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.Math.jew.fe.not.peri &lt;- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.Math.jew.fe.vars.not.peri &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.Math.jew.not.peri, didreg.Math.jew.fe.not.peri, didreg.Math.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ================================================================
+##                                         Jewish sector           
+##                              -----------------------------------
+##                              Model 1       Model 2    Model 3   
+## ----------------------------------------------------------------
+## Intercept                       0.150 ***                       
+##                                (0.013)                          
+## Treat                          -0.007                           
+##                                (0.022)                          
+## After                           0.269 ***                       
+##                                (0.018)                          
+## Reform DiD                     -0.003         0.015      0.005  
+##                                (0.031)       (0.047)    (0.049) 
+## Male indicator                                           0.020  
+##                                                         (0.034) 
+## Mother&#39;s years of education                              0.003  
+##                                                         (0.009) 
+## Father&#39;s years of education                             -0.002  
+##                                                         (0.008) 
+## Number of siblings                                      -0.001  
+##                                                         (0.030) 
+## Native indicator                                         0.178  
+##                                                         (0.159) 
+## SES index                                                0.021  
+##                                                         (0.026) 
+## Class size                                               0.004 *
+##                                                         (0.003) 
+## School age                                              -0.003  
+##                                                         (0.002) 
+## ----------------------------------------------------------------
+## R^2                             0.204         0.596      0.599  
+## Adj. R^2                        0.202         0.412      0.411  
+## Num. obs.                    1672          1672       1666      
+## RMSE                            0.247         0.212      0.212  
+## N Clusters                    519           519        519      
+## ================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="using-computers-in-tech-classes-1" class="section level3">
+<h3>4. Using computers in Tech classes</h3>
+<p><strong>Q: “Do you use a computer during Tech or Science lessons?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.Tech.jew.not.peri &lt;- lm_robust(Tech ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.Tech.jew.fe.not.peri &lt;- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.Tech.jew.fe.vars.not.peri &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.Tech.jew.not.peri, didreg.Tech.jew.fe.not.peri, didreg.Tech.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## =================================================================
+##                                          Jewish sector           
+##                              ------------------------------------
+##                              Model 1       Model 2    Model 3    
+## -----------------------------------------------------------------
+## Intercept                       0.161 ***                        
+##                                (0.012)                           
+## Treat                          -0.019                            
+##                                (0.019)                           
+## After                           0.222 ***                        
+##                                (0.016)                           
+## Reform DiD                     -0.010        -0.015     -0.009   
+##                                (0.029)       (0.046)    (0.047)  
+## Male indicator                                           0.015   
+##                                                         (0.028)  
+## Mother&#39;s years of education                             -0.003   
+##                                                         (0.008)  
+## Father&#39;s years of education                             -0.007   
+##                                                         (0.009)  
+## Number of siblings                                      -0.017   
+##                                                         (0.025)  
+## Native indicator                                         0.125   
+##                                                         (0.136)  
+## SES index                                               -0.009   
+##                                                         (0.022)  
+## Class size                                               0.005 **
+##                                                         (0.002)  
+## School age                                               0.004 **
+##                                                         (0.002)  
+## -----------------------------------------------------------------
+## R^2                             0.180         0.599      0.604   
+## Adj. R^2                        0.179         0.417      0.419   
+## Num. obs.                    1672          1672       1666       
+## RMSE                            0.219         0.185      0.184   
+## N Clusters                    519           519        519       
+## =================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="schools-website-awareness-1" class="section level3">
+<h3>5. School’s Website awareness</h3>
+<p><strong>Q: “Does the school have an internet site?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.website.jew.not.peri &lt;- lm_robust(dummy_yes_no_website ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.website.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_website ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.website.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.website.jew.not.peri, didreg.website.jew.fe.not.peri, didreg.website.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## =================================================================
+##                                          Jewish sector           
+##                              ------------------------------------
+##                              Model 1       Model 2      Model 3  
+## -----------------------------------------------------------------
+## Intercept                       0.848 ***                        
+##                                (0.022)                           
+## Treat                          -0.063                            
+##                                (0.038)                           
+## After                           0.033                            
+##                                (0.021)                           
+## Reform DiD                      0.092 **      0.084 **     0.065 
+##                                (0.036)       (0.041)      (0.041)
+## Male indicator                                            -0.001 
+##                                                           (0.022)
+## Mother&#39;s years of education                                0.003 
+##                                                           (0.006)
+## Father&#39;s years of education                                0.000 
+##                                                           (0.006)
+## Number of siblings                                        -0.057 
+##                                                           (0.035)
+## Native indicator                                           0.077 
+##                                                           (0.114)
+## SES index                                                  0.020 
+##                                                           (0.019)
+## Class size                                                 0.000 
+##                                                           (0.002)
+## School age                                                -0.003 
+##                                                           (0.002)
+## -----------------------------------------------------------------
+## R^2                             0.024         0.743        0.750 
+## Adj. R^2                        0.022         0.627        0.633 
+## Num. obs.                    1672          1672         1666     
+## RMSE                            0.229         0.141        0.139 
+## N Clusters                    519           519          519     
+## =================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="schools-website-download-1" class="section level3">
+<h3>6. School’s Website Download</h3>
+<p><strong>Q: “Have you downloaded study materials, such as homework, summaries, tests, from the school website?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.Download.jew.not.peri &lt;- lm_robust(dummy_yes_no_download ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.Download.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_download ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.Download.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.Download.jew.not.peri, didreg.Download.jew.fe.not.peri, didreg.Download.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ================================================================
+##                                         Jewish sector           
+##                              -----------------------------------
+##                              Model 1       Model 2    Model 3   
+## ----------------------------------------------------------------
+## Intercept                       0.247 ***                       
+##                                (0.016)                          
+## Treat                          -0.028                           
+##                                (0.024)                          
+## After                           0.089 ***                       
+##                                (0.019)                          
+## Reform DiD                     -0.001        -0.002     -0.012  
+##                                (0.030)       (0.037)    (0.038) 
+## Male indicator                                           0.002  
+##                                                         (0.028) 
+## Mother&#39;s years of education                              0.004  
+##                                                         (0.007) 
+## Father&#39;s years of education                             -0.001  
+##                                                         (0.007) 
+## Number of siblings                                       0.018  
+##                                                         (0.021) 
+## Native indicator                                         0.024  
+##                                                         (0.104) 
+## SES index                                                0.032 *
+##                                                         (0.017) 
+## Class size                                              -0.001  
+##                                                         (0.002) 
+## School age                                              -0.001  
+##                                                         (0.001) 
+## ----------------------------------------------------------------
+## R^2                             0.032         0.675      0.677  
+## Adj. R^2                        0.031         0.527      0.526  
+## Num. obs.                    1668          1668       1662      
+## RMSE                            0.237         0.166      0.166  
+## N Clusters                    518           518        518      
+## ================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="schools-website-upload-1" class="section level3">
+<h3>7. School’s Website Upload</h3>
+<p><strong>Q: “Have you uploaded study materials, such as homework, summaries, tests, to the school website?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.upload.jew.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.upload.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.upload.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.upload.jew.not.peri, didreg.upload.jew.fe.not.peri, didreg.upload.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ===================================================================
+##                                           Jewish sector            
+##                              --------------------------------------
+##                              Model 1       Model 2     Model 3     
+## -------------------------------------------------------------------
+## Intercept                       0.266 ***                          
+##                                (0.014)                             
+## Treat                          -0.025                              
+##                                (0.024)                             
+## After                           0.000                              
+##                                (0.017)                             
+## Reform DiD                      0.025         0.061 *     0.048    
+##                                (0.026)       (0.036)     (0.037)   
+## Male indicator                                            0.023    
+##                                                          (0.026)   
+## Mother&#39;s years of education                               0.006    
+##                                                          (0.007)   
+## Father&#39;s years of education                              -0.008    
+##                                                          (0.007)   
+## Number of siblings                                       -0.017    
+##                                                          (0.020)   
+## Native indicator                                          0.100    
+##                                                          (0.098)   
+## SES index                                                 0.036 ** 
+##                                                          (0.018)   
+## Class size                                                0.000    
+##                                                          (0.002)   
+## School age                                               -0.004 ***
+##                                                          (0.001)   
+## -------------------------------------------------------------------
+## R^2                             0.001         0.592       0.603    
+## Adj. R^2                       -0.000         0.406       0.418    
+## Num. obs.                    1668          1668        1662        
+## RMSE                            0.208         0.161       0.158    
+## N Clusters                    518           518         518        
+## ===================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="schoolsclasss-forum-1" class="section level3">
+<h3>8. School’s/class’s forum</h3>
+<p><strong>Q: “Have you participated in online school discussion groups on academic topics?”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.forum.jew.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.forum.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.forum.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.forum.jew.not.peri, didreg.forum.jew.fe.not.peri, didreg.forum.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ==================================================================
+##                                          Jewish sector            
+##                              -------------------------------------
+##                              Model 1       Model 2    Model 3     
+## ------------------------------------------------------------------
+## Intercept                       0.262 ***                         
+##                                (0.014)                            
+## Treat                          -0.063 ***                         
+##                                (0.021)                            
+## After                           0.011                             
+##                                (0.017)                            
+## Reform DiD                      0.051 **      0.050      0.039    
+##                                (0.026)       (0.033)    (0.034)   
+## Male indicator                                          -0.000    
+##                                                         (0.026)   
+## Mother&#39;s years of education                             -0.001    
+##                                                         (0.006)   
+## Father&#39;s years of education                             -0.002    
+##                                                         (0.006)   
+## Number of siblings                                       0.002    
+##                                                         (0.023)   
+## Native indicator                                         0.020    
+##                                                         (0.093)   
+## SES index                                                0.032 *  
+##                                                         (0.017)   
+## Class size                                              -0.000    
+##                                                         (0.002)   
+## School age                                               0.006 ***
+##                                                         (0.001)   
+## ------------------------------------------------------------------
+## R^2                             0.011         0.613      0.617    
+## Adj. R^2                        0.009         0.437      0.437    
+## Num. obs.                    1669          1669       1663        
+## RMSE                            0.207         0.156      0.156    
+## N Clusters                    518           518        518        
+## ==================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="general-school-satisfaction-indicator-1" class="section level3">
+<h3>9. General school satisfaction Indicator</h3>
+<p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “I feel good at school”</strong> <strong>Q: “I love being in school”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.feel_index.jew.not.peri &lt;- lm_robust(feel_index ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.feel_index.jew.fe.not.peri &lt;- lm_robust(feel_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.feel_index.jew.fe.vars.not.peri &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.feel_index.jew.not.peri, didreg.feel_index.jew.fe.not.peri, didreg.feel_index.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ==================================================================
+##                                          Jewish sector            
+##                              -------------------------------------
+##                              Model 1       Model 2    Model 3     
+## ------------------------------------------------------------------
+## Intercept                       0.173 ***                         
+##                                (0.016)                            
+## Treat                          -0.118 ***                         
+##                                (0.030)                            
+## After                          -0.027                             
+##                                (0.022)                            
+## Reform DiD                      0.039         0.027      0.027    
+##                                (0.038)       (0.043)    (0.043)   
+## Male indicator                                          -0.157 ***
+##                                                         (0.059)   
+## Mother&#39;s years of education                             -0.011    
+##                                                         (0.009)   
+## Father&#39;s years of education                              0.011    
+##                                                         (0.010)   
+## Number of siblings                                      -0.009    
+##                                                         (0.054)   
+## Native indicator                                        -0.051    
+##                                                         (0.163)   
+## SES index                                                0.023    
+##                                                         (0.027)   
+## Class size                                               0.003    
+##                                                         (0.003)   
+## School age                                               0.001    
+##                                                         (0.002)   
+## ------------------------------------------------------------------
+## R^2                             0.015         0.444      0.452    
+## Adj. R^2                        0.014         0.278      0.283    
+## Num. obs.                    2260          2260       2252        
+## RMSE                            0.384         0.329      0.327    
+## N Clusters                    519           519        519        
+## ==================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="studentteacher-relations-indicator-1" class="section level3">
+<h3>10. Student–teacher relations Indicator</h3>
+<p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
+<p>DiD regression with clustered SE - Jewish sector</p>
+<pre class="r"><code>didreg.behave_index.jew.not.peri &lt;- lm_robust(behave_index ~ treat + after + did,
+                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.behave_index.jew.fe.not.peri &lt;- lm_robust(behave_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
+
+didreg.behave_index.jew.fe.vars.not.peri &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
+                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
+<p>Results table</p>
+<pre class="r"><code>screenreg(list(didreg.behave_index.jew.not.peri, didreg.behave_index.jew.fe.not.peri, didreg.behave_index.jew.fe.vars.not.peri),
+          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
+                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
+          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
+<pre><code>## 
+## ==================================================================
+##                                          Jewish sector            
+##                              -------------------------------------
+##                              Model 1       Model 2    Model 3     
+## ------------------------------------------------------------------
+## Intercept                      -0.046 ***                         
+##                                (0.010)                            
+## Treat                           0.020                             
+##                                (0.016)                            
+## After                          -0.046 ***                         
+##                                (0.015)                            
+## Reform DiD                      0.010         0.021      0.016    
+##                                (0.024)       (0.026)    (0.027)   
+## Male indicator                                           0.160 ***
+##                                                         (0.029)   
+## Mother&#39;s years of education                              0.010    
+##                                                         (0.006)   
+## Father&#39;s years of education                             -0.008    
+##                                                         (0.006)   
+## Number of siblings                                      -0.017    
+##                                                         (0.026)   
+## Native indicator                                         0.105    
+##                                                         (0.112)   
+## SES index                                               -0.005    
+##                                                         (0.016)   
+## Class size                                               0.007 ***
+##                                                         (0.002)   
+## School age                                               0.003 ***
+##                                                         (0.001)   
+## ------------------------------------------------------------------
+## R^2                             0.010         0.433      0.457    
+## Adj. R^2                        0.008         0.263      0.290    
+## Num. obs.                    2260          2260       2252        
+## RMSE                            0.250         0.216      0.212    
+## N Clusters                    519           519        519        
+## ==================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
 </div>
 </div>
