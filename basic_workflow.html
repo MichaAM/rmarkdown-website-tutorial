@@ -299,7 +299,19 @@ $(document).ready(function () {
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>In this analysis there are 3 models for each school-learning environment analysis: 1. Model 1: General DiD with clustered SE at school level 2. Model 2: DiD with school and year fixed effects 3. Model 3: DiD with school and year fixed effects and additional variables</p>
+<p>In this analysis there are 3 models for each school-learning environment analysis:<br />
+1. Model 1: General DiD with clustered SE at school level<br />
+2. Model 2: DiD with school and year fixed effects<br />
+3. Model 3: DiD with school and year fixed effects and additional variables</p>
+</div>
+<div id="dependent-variables-description-in-the-following-analysis" class="section level2">
+<h2>Dependent variables description in the following analysis:</h2>
+<p>Questions 1-4 : The choices in the questionnaire presented 3 possible answers: 1- Often, 2- Rarely or 3- Not at all. I created a new dummy variable that takes “1” for “often” and “0” for rest.</p>
+<p>Questions 4-8 : The choices in the questionnaire presented 3 possible answers: 1- Yes, 2- No or 3- Don’t Know Second, I created a new dummy variable that takes “1” for “Yes” and “0” for rest.</p>
+<p>Questions 9-10 : The 2 last question are indicators for General satisfaction from school and Student misbehavior in class. For the General satisfaction indicator I averaged 2 the answers of the following questions: <strong>Q: “I feel good at school”</strong> <strong>Q: “I love being in school”</strong></p>
+<p>For the Student misbehavior in class indicator I averaged 2 the answers of the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
+<p>The choices in the questionnaire presented 5 possible answers: 1- Agree to 5- Disagree</p>
+<p>I standardized the answers grad using z score with yearly average.</p>
 </div>
 <div id="analysis-by-sector" class="section level1">
 <h1><strong>Analysis by sector</strong></h1>
@@ -915,9 +927,9 @@ didreg.feel.arb.fe.vars &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMU
 ## ========================================================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
 </div>
-<div id="studentteacher-relations-indicator" class="section level3">
-<h3>10. Student–teacher relations Indicator</h3>
-<p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
+<div id="student-misbehavior-in-class-indicator" class="section level3">
+<h3>10. Student misbehavior in class Indicator</h3>
+<p>The Student misbehavior in class Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.behave.jew &lt;- lm_robust(behave_index ~ treat + after + did,
                              data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
@@ -1555,9 +1567,9 @@ didreg.feel_index.jew.fe.vars.not.peri &lt;- lm_robust(feel_index ~ did + CODE_M
 ## ==================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
 </div>
-<div id="studentteacher-relations-indicator-1" class="section level3">
-<h3>10. Student–teacher relations Indicator</h3>
-<p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
+<div id="student-misbehavior-in-class-indicator-1" class="section level3">
+<h3>10. Student misbehavior in class Indicator</h3>
+<p>The Student misbehavior in class Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
 <pre class="r"><code>didreg.behave_index.jew.not.peri &lt;- lm_robust(behave_index ~ treat + after + did,
                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
