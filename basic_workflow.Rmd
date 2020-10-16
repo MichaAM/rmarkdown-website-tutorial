@@ -38,15 +38,15 @@ Questions 4-8 : The choices in the questionnaire presented 3 possible answers: 1
 Second, I created a new dummy variable that takes "1" for "Yes" and "0" for rest. 
 
 Questions 9-10 : The 2 last question are indicators for General satisfaction from school and Student misbehavior in class.
-For the General satisfaction indicator I averaged 2 the answers of the following questions: 
-**Q: "I feel good at school"** 
-**Q: "I love being in school"**
+For the General satisfaction indicator I averaged 2 the answers of the following questions:   
+**Q: "I feel good at school"**   
+**Q: "I love being in school"**  
 
-For the Student misbehavior in class indicator I averaged 2 the answers of the following questions: 
-**Q: "The students in my class treat teachers with respect"** 
-**Q: "Students often make noise and commotion in the classroom and impair the learning of other students"**
-**Q: "In my class there are students who are rude to teachers"** 
-**Q: "Teachers have to wait a long time at the beginning of the lesson until the students stop making noise"** 
+For the Student misbehavior in class indicator I averaged 2 the answers of the following questions:   
+**Q: "The students in my class treat teachers with respect"**   
+**Q: "Students often make noise and commotion in the classroom and impair the learning of other students"**  
+**Q: "In my class there are students who are rude to teachers"**   
+**Q: "Teachers have to wait a long time at the beginning of the lesson until the students stop making noise"**   
 
 The choices in the questionnaire presented 5 possible answers: 1- Agree to 5- Disagree
 
