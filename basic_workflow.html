@@ -325,31 +325,8 @@ $(document).ready(function () {
 <h3>1. Using computers in language classes</h3>
 <p><strong>Q: “Do you use a computer during language lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.lang.jew &lt;- lm_robust(Lang ~ treat + after + did,
-                            data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.lang.jew.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.lang.jew.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.lang.arb &lt;- lm_robust(Lang ~ treat + after + did,
-                             data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.lang.arb.fe &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.lang.arb.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.lang.jew, didreg.lang.jew.fe, didreg.lang.jew.fe.vars, didreg.lang.arb, didreg.lang.arb.fe, didreg.lang.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ======================================================================================================
 ##                                          Jewish sector                          Arab sector           
@@ -393,31 +370,8 @@ didreg.lang.arb.fe.vars &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 <h3>2. Using computers in English classes</h3>
 <p><strong>Q: “Do you use a computer during English lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.English.jew &lt;- lm_robust(English ~ treat + after + did,
-                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.English.jew.fe &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.English.jew.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.English.arb &lt;- lm_robust(English ~ treat + after + did,
-                             data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.English.arb.fe &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.English.arb.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.English.jew, didreg.English.jew.fe, didreg.English.jew.fe.vars, didreg.English.arb, didreg.English.arb.fe, didreg.English.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ======================================================================================================
 ##                                          Jewish sector                          Arab sector           
@@ -461,31 +415,8 @@ didreg.English.arb.fe.vars &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMU
 <h3>3. Using computers in Math classes</h3>
 <p><strong>Q: “Do you use a computer during Math lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.Math.jew &lt;- lm_robust(Math ~ treat + after + did,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Math.jew.fe &lt;- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                   data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Math.jew.fe.vars &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                          SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                        data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.Math.arb &lt;- lm_robust(Math ~ treat + after + did,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Math.arb.fe &lt;- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                   data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Math.arb.fe.vars &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                        data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.Math.jew, didreg.Math.jew.fe, didreg.Math.jew.fe.vars, didreg.Math.arb, didreg.Math.arb.fe, didreg.Math.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ====================================================================================================
 ##                                         Jewish sector                         Arab sector           
@@ -529,31 +460,8 @@ didreg.Math.arb.fe.vars &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 <h3>4. Using computers in Tech classes</h3>
 <p><strong>Q: “Do you use a computer during Tech or Science lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.Tech.jew &lt;- lm_robust(Tech ~ treat + after + did,
-                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Tech.jew.fe &lt;- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Tech.jew.fe.vars &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.Tech.arb &lt;- lm_robust(Tech ~ treat + after + did,
-                             data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Tech.arb.fe &lt;- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Tech.arb.fe.vars &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.Tech.jew, didreg.Tech.jew.fe, didreg.Tech.jew.fe.vars, didreg.Tech.arb, didreg.Tech.arb.fe, didreg.Tech.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## =====================================================================================================
 ##                                          Jewish sector                         Arab sector           
@@ -597,31 +505,8 @@ didreg.Tech.arb.fe.vars &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM +
 <h3>5. School’s Website awareness</h3>
 <p><strong>Q: “Does the school have an internet site?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.website.jew &lt;- lm_robust(dummy_yes_no_website ~ treat + after + did,
-                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.website.jew.fe &lt;- lm_robust(dummy_yes_no_website ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.website.jew.fe.vars &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.website.arb &lt;- lm_robust(dummy_yes_no_website ~ treat + after + did,
-                             data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.website.arb.fe &lt;- lm_robust(dummy_yes_no_website ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.website.arb.fe.vars &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.website.jew, didreg.website.jew.fe, didreg.website.jew.fe.vars, didreg.website.arb, didreg.website.arb.fe, didreg.website.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ======================================================================================================
 ##                                          Jewish sector                          Arab sector           
@@ -665,31 +550,8 @@ didreg.website.arb.fe.vars &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN
 <h3>6. School’s Website Download</h3>
 <p><strong>Q: “Have you downloaded study materials, such as homework, summaries, tests, from the school website?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.download.jew &lt;- lm_robust(dummy_yes_no_download ~ treat + after + did,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.download.jew.fe &lt;- lm_robust(dummy_yes_no_download ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                   data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.download.jew.fe.vars &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                          SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                        data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.download.arb &lt;- lm_robust(dummy_yes_no_download ~ treat + after + did,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.download.arb.fe &lt;- lm_robust(dummy_yes_no_download ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                   data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.download.arb.fe.vars &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                          SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                        data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.download.jew, didreg.download.jew.fe, didreg.download.jew.fe.vars, didreg.download.arb, didreg.download.arb.fe, didreg.download.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ==================================================================================================
 ##                                          Jewish sector                       Arab sector          
@@ -733,31 +595,8 @@ didreg.download.arb.fe.vars &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_M
 <h3>7. School’s Website Upload</h3>
 <p><strong>Q: “Have you uploaded study materials, such as homework, summaries, tests, to the school website?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.upload.jew &lt;- lm_robust(dummy_yes_no_upload ~ treat + after + did,
-                                 data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.upload.jew.fe &lt;- lm_robust(dummy_yes_no_upload ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                    data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.upload.jew.fe.vars &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                           SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                         data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.upload.arb &lt;- lm_robust(dummy_yes_no_upload ~ treat + after + did,
-                                 data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.upload.arb.fe &lt;- lm_robust(dummy_yes_no_upload ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                    data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.upload.arb.fe.vars &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                           SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                         data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.upload.jew, didreg.upload.jew.fe, didreg.upload.jew.fe.vars, didreg.upload.arb, didreg.upload.arb.fe, didreg.upload.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ======================================================================================================
 ##                                           Jewish sector                          Arab sector          
@@ -801,25 +640,7 @@ didreg.upload.arb.fe.vars &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN +
 <h3>8. School’s/class’s forum</h3>
 <p><strong>Q: “Have you participated in online school discussion groups on academic topics?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.forum.jew &lt;- lm_robust(dummy_yes_no_forum ~ treat + after + did,
-                               data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.forum.jew.fe &lt;- lm_robust(dummy_yes_no_forum ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                  data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.forum.jew.fe.vars &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                         SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                       data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.forum.arb &lt;- lm_robust(dummy_yes_no_forum ~ treat + after + did,
-                               data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.forum.arb.fe &lt;- lm_robust(dummy_yes_no_forum ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                  data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.forum.arb.fe.vars &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                         SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                       data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
 <pre class="r"><code>screenreg(list(didreg.forum.jew, didreg.forum.jew.fe, didreg.forum.jew.fe.vars, didreg.forum.arb, didreg.forum.arb.fe, didreg.forum.arb.fe.vars),
           custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
@@ -869,31 +690,8 @@ didreg.forum.arb.fe.vars &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + S
 <h3>9. General school satisfaction Indicator</h3>
 <p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “I feel good at school”</strong> <strong>Q: “I love being in school”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.feel.jew &lt;- lm_robust(feel_index ~ treat + after + did,
-                              data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.feel.jew.fe &lt;- lm_robust(feel_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                 data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.feel.jew.fe.vars &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                      data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.feel.arb &lt;- lm_robust(feel_index ~ treat + after + did,
-                              data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.feel.arb.fe &lt;- lm_robust(feel_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                 data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.feel.arb.fe.vars &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                        SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                      data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.feel.jew, didreg.feel.jew.fe, didreg.feel.jew.fe.vars, didreg.feel.arb, didreg.feel.arb.fe, didreg.feel.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ========================================================================================================
 ##                                          Jewish sector                           Arab sector            
@@ -937,31 +735,8 @@ didreg.feel.arb.fe.vars &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMU
 <h3>10. Student misbehavior in class Indicator</h3>
 <p>The Student misbehavior in class Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.behave.jew &lt;- lm_robust(behave_index ~ treat + after + did,
-                             data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.behave.jew.fe &lt;- lm_robust(behave_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.behave.jew.fe.vars &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>DiD regression with clustered SE - Arab sector</p>
-<pre class="r"><code>didreg.behave.arb &lt;- lm_robust(behave_index ~ treat + after + did,
-                             data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.behave.arb.fe &lt;- lm_robust(behave_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.behave.arb.fe.vars &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                       SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                     data = final_arb, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Combined results table</p>
-<pre class="r"><code>screenreg(list(didreg.behave.jew, didreg.behave.jew.fe, didreg.behave.jew.fe.vars, didreg.behave.arb, didreg.behave.arb.fe, didreg.behave.arb.fe.vars),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3,  &quot;Arab sector&quot; = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;, &quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## =======================================================================================================
 ##                                          Jewish sector                          Arab sector            
@@ -1005,24 +780,10 @@ didreg.behave.arb.fe.vars &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_
 <div id="analysis-by-regions-per-sectors" class="section level1">
 <h1><strong>Analysis by regions per sectors</strong></h1>
 <p>Split by region - Periphery vs Rest</p>
-<pre class="r"><code>final_peri &lt;- final %&gt;%
-  filter(CODE_MACHOZ_GEOGRAFI == &quot;2&quot; | CODE_MACHOZ_GEOGRAFI == &quot;6&quot;)
-
-final_not_periphery &lt;- final %&gt;%
-  filter(CODE_MACHOZ_GEOGRAFI != &quot;2&quot; &amp; CODE_MACHOZ_GEOGRAFI != &quot;6&quot;)</code></pre>
 <p>###Analysis of periphery region</p>
 <p>Split each Periphery vs Rest by sector</p>
-<pre class="r"><code>final_peri_jew &lt;- final_peri %&gt;%
-  filter(CODE_MIGZAR == &quot;0&quot;)
-
-final_peri_arb &lt;- final_peri %&gt;%
-  filter(CODE_MIGZAR == &quot;1&quot;)</code></pre>
 <p>###Check ratio of treated vs untreated for each region</p>
 <p>Periphery: ratio of Arab sector vs Jewish sector for periphery region</p>
-<pre class="r"><code>peri_sector_treat_ratio_table &lt;- table(final_peri$CODE_MIGZAR, final_peri$treat)
-row.names(peri_sector_treat_ratio_table) &lt;- c(&quot;Jewish&quot;, &quot;Arab&quot;)
-colnames(peri_sector_treat_ratio_table) &lt;- c(&quot;Treated&quot;, &quot;Untreated&quot;)
-peri_sector_treat_ratio_table</code></pre>
 <pre><code>##         
 ##          Treated Untreated
 ##   Jewish     116       811
@@ -1031,10 +792,6 @@ peri_sector_treat_ratio_table</code></pre>
 <li>Only 143 classes out of 1812 from the periphery took part in the ICT program</li>
 </ul>
 <p>Not periphery: ratio of Arab sector vs Jewish sector for not periphery region</p>
-<pre class="r"><code>not_peri_sector_treat_ratio_table &lt;- table(final_not_periphery$CODE_MIGZAR, final_not_periphery$treat)
-row.names(not_peri_sector_treat_ratio_table) &lt;- c(&quot;Jewish&quot;, &quot;Arab&quot;)
-colnames(not_peri_sector_treat_ratio_table) &lt;- c(&quot;Treated&quot;, &quot;Untreated&quot;)
-not_peri_sector_treat_ratio_table</code></pre>
 <pre><code>##         
 ##          Treated Untreated
 ##   Jewish    1493       767
@@ -1046,30 +803,11 @@ not_peri_sector_treat_ratio_table</code></pre>
 <div id="not-periphery-schools-learning-environment-analysis---jewish-sector-only" class="section level1">
 <h1>Not periphery schools learning environment analysis - <strong>Jewish sector only</strong></h1>
 <p>Split not_periphery by sectors</p>
-<pre class="r"><code>final_not_peri_jew &lt;- final_not_periphery %&gt;%
-  filter(CODE_MIGZAR == &quot;0&quot;)
-
-final_not_peri_arb &lt;- final_not_periphery %&gt;%
-  filter(CODE_MIGZAR == &quot;1&quot;)</code></pre>
 <div id="using-computers-in-language-classes-1" class="section level3">
 <h3>1. Using computers in language classes</h3>
 <p><strong>Q: “Do you use a computer during language lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.lang.jew.not.peri &lt;- lm_robust(Lang ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.lang.jew.fe.not.peri &lt;- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.lang.jew.fe.vars.not.peri &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.lang.jew.not.peri, didreg.lang.jew.fe.not.peri, didreg.lang.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ===============================================================
 ##                                         Jewish sector          
@@ -1113,21 +851,7 @@ didreg.lang.jew.fe.vars.not.peri &lt;- lm_robust(Lang ~ did + CODE_MIN + SHNOT_L
 <h3>2. Using computers in English classes</h3>
 <p><strong>Q: “Do you use a computer during English lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.English.jew.not.peri &lt;- lm_robust(English ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.English.jew.fe.not.peri &lt;- lm_robust(English ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.English.jew.fe.vars.not.peri &lt;- lm_robust(English ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.English.jew.not.peri, didreg.English.jew.fe.not.peri, didreg.English.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ==================================================================
 ##                                          Jewish sector            
@@ -1171,21 +895,7 @@ didreg.English.jew.fe.vars.not.peri &lt;- lm_robust(English ~ did + CODE_MIN + S
 <h3>3. Using computers in Math classes</h3>
 <p><strong>Q: “Do you use a computer during Math lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.Math.jew.not.peri &lt;- lm_robust(Math ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Math.jew.fe.not.peri &lt;- lm_robust(Math ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Math.jew.fe.vars.not.peri &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.Math.jew.not.peri, didreg.Math.jew.fe.not.peri, didreg.Math.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ================================================================
 ##                                         Jewish sector           
@@ -1229,21 +939,7 @@ didreg.Math.jew.fe.vars.not.peri &lt;- lm_robust(Math ~ did + CODE_MIN + SHNOT_L
 <h3>4. Using computers in Tech classes</h3>
 <p><strong>Q: “Do you use a computer during Tech or Science lessons?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.Tech.jew.not.peri &lt;- lm_robust(Tech ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Tech.jew.fe.not.peri &lt;- lm_robust(Tech ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Tech.jew.fe.vars.not.peri &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.Tech.jew.not.peri, didreg.Tech.jew.fe.not.peri, didreg.Tech.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## =================================================================
 ##                                          Jewish sector           
@@ -1287,21 +983,7 @@ didreg.Tech.jew.fe.vars.not.peri &lt;- lm_robust(Tech ~ did + CODE_MIN + SHNOT_L
 <h3>5. School’s Website awareness</h3>
 <p><strong>Q: “Does the school have an internet site?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.website.jew.not.peri &lt;- lm_robust(dummy_yes_no_website ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.website.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_website ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.website.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_website ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.website.jew.not.peri, didreg.website.jew.fe.not.peri, didreg.website.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## =================================================================
 ##                                          Jewish sector           
@@ -1345,21 +1027,7 @@ didreg.website.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_website ~ did +
 <h3>6. School’s Website Download</h3>
 <p><strong>Q: “Have you downloaded study materials, such as homework, summaries, tests, from the school website?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.Download.jew.not.peri &lt;- lm_robust(dummy_yes_no_download ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Download.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_download ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.Download.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_download ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.Download.jew.not.peri, didreg.Download.jew.fe.not.peri, didreg.Download.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ================================================================
 ##                                         Jewish sector           
@@ -1403,21 +1071,7 @@ didreg.Download.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_download ~ did
 <h3>7. School’s Website Upload</h3>
 <p><strong>Q: “Have you uploaded study materials, such as homework, summaries, tests, to the school website?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.upload.jew.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.upload.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.upload.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.upload.jew.not.peri, didreg.upload.jew.fe.not.peri, didreg.upload.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ===================================================================
 ##                                           Jewish sector            
@@ -1461,21 +1115,7 @@ didreg.upload.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_upload ~ did + C
 <h3>8. School’s/class’s forum</h3>
 <p><strong>Q: “Have you participated in online school discussion groups on academic topics?”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.forum.jew.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.forum.jew.fe.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.forum.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.forum.jew.not.peri, didreg.forum.jew.fe.not.peri, didreg.forum.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ==================================================================
 ##                                          Jewish sector            
@@ -1519,21 +1159,7 @@ didreg.forum.jew.fe.vars.not.peri &lt;- lm_robust(dummy_yes_no_forum ~ did + COD
 <h3>9. General school satisfaction Indicator</h3>
 <p>The General school satisfaction Indicator consists of the average of the answers to the following questions: <strong>Q: “I feel good at school”</strong> <strong>Q: “I love being in school”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.feel_index.jew.not.peri &lt;- lm_robust(feel_index ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.feel_index.jew.fe.not.peri &lt;- lm_robust(feel_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.feel_index.jew.fe.vars.not.peri &lt;- lm_robust(feel_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.feel_index.jew.not.peri, didreg.feel_index.jew.fe.not.peri, didreg.feel_index.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ==================================================================
 ##                                          Jewish sector            
@@ -1577,21 +1203,7 @@ didreg.feel_index.jew.fe.vars.not.peri &lt;- lm_robust(feel_index ~ did + CODE_M
 <h3>10. Student misbehavior in class Indicator</h3>
 <p>The Student misbehavior in class Indicator consists of the average of the answers to the following questions: <strong>Q: “The students in my class treat teachers with respect”</strong> <strong>Q: “Students often make noise and commotion in the classroom and impair the learning of other students”</strong> <strong>Q: “In my class there are students who are rude to teachers”</strong> <strong>Q: “Teachers have to wait a long time at the beginning of the lesson until the students stop making noise”</strong></p>
 <p>DiD regression with clustered SE - Jewish sector</p>
-<pre class="r"><code>didreg.behave_index.jew.not.peri &lt;- lm_robust(behave_index ~ treat + after + did,
-                            data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.behave_index.jew.fe.not.peri &lt;- lm_robust(behave_index ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                             data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)
-
-didreg.behave_index.jew.fe.vars.not.peri &lt;- lm_robust(behave_index ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
-                                     SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                                data = final_not_peri_jew, clusters = CODE_MOSAD, se_type = &quot;stata&quot;)</code></pre>
 <p>Results table</p>
-<pre class="r"><code>screenreg(list(didreg.behave_index.jew.not.peri, didreg.behave_index.jew.fe.not.peri, didreg.behave_index.jew.fe.vars.not.peri),
-          custom.header = list(&quot;Jewish sector&quot; = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          custom.coef.names = c(&quot;Intercept&quot;, &quot;Treat&quot;, &quot;After&quot;, &quot;Reform DiD&quot;, &quot;Male indicator&quot;, &quot;Mother&#39;s years of education&quot;, &quot;Father&#39;s years of education&quot;,
-                                &quot;Number of siblings&quot;, &quot;Native indicator&quot;, &quot;SES index&quot;, &quot;Class size&quot;, &quot;School age&quot;),
-          digits = 3, custom.model.names = c(&quot;Model 1&quot;, &quot;Model 2&quot;, &quot;Model 3&quot;))</code></pre>
 <pre><code>## 
 ## ==================================================================
 ##                                          Jewish sector            
