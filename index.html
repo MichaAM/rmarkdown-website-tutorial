@@ -589,6 +589,326 @@ $(document).ready(function () {
 ## N Clusters                     577            577            519            78            78            78        
 ## ==================================================================================================================
 ## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+<div id="ses-index-analysis" class="section level3">
+<h3>SES index analysis</h3>
+</div>
+</div>
+</div>
+<div id="split-ses-index-to-3-levels-index." class="section level1">
+<h1>Split SES index to 3 levels index.</h1>
+<pre class="r"><code>final.df.elion &lt;- finald %&gt;%
+  filter(SES_index &lt;= 4)
+final.df.emtsae &lt;- finald %&gt;%
+  filter(SES_index &gt; 4 &amp; SES_index &lt;= 7)
+final.df.tahton &lt;- finald %&gt;%
+  filter(SES_index &gt; 7)</code></pre>
+</div>
+<div id="split-thirds-by-sector" class="section level1">
+<h1>Split thirds by sector</h1>
+<pre class="r"><code>final.df.elion.jew &lt;- final.df.elion %&gt;%
+  filter(CODE_MIGZAR == &quot;0&quot;)
+final.df.elion.arb &lt;- final.df.elion %&gt;%
+  filter(CODE_MIGZAR == &quot;1&quot;)
+
+final.df.emtsae.jew &lt;- final.df.emtsae %&gt;%
+  filter(CODE_MIGZAR == &quot;0&quot;)
+final.df.emtsae.arb &lt;- final.df.emtsae %&gt;%
+  filter(CODE_MIGZAR == &quot;1&quot;)
+
+final.df.tahton.jew &lt;- final.df.tahton %&gt;%
+  filter(CODE_MIGZAR == &quot;0&quot;)
+final.df.tahton.arb &lt;- final.df.tahton %&gt;%
+  filter(CODE_MIGZAR == &quot;1&quot;)</code></pre>
+</div>
+<div id="analysis-of-top-upper-third" class="section level1">
+<h1>Analysis of top Upper third</h1>
+<div id="section" class="section level45">
+<p class="heading"></p>
+</div>
+<div id="simple-did-regression" class="section level2">
+<h2>Simple DiD regression</h2>
+<div id="did-regression-with-clustered-se---jewish-sector-only" class="section level3">
+<h3>DiD regression with clustered SE - Jewish sector only</h3>
+<p>Combined sector General DiD results - Rest of israel by sectors</p>
+<pre><code>## 
+## ========================================================
+##                             Jewish sector               
+##              -------------------------------------------
+##              Hebrew         Math           English      
+## --------------------------------------------------------
+## (Intercept)      0.250 ***      0.360 ***      0.261 ***
+##                 (0.028)        (0.032)        (0.033)   
+## treat           -0.047         -0.025         -0.004    
+##                 (0.041)        (0.051)        (0.055)   
+## after           -0.062 **      -0.030         -0.066    
+##                 (0.031)        (0.036)        (0.041)   
+## did              0.121 **       0.052          0.030    
+##                 (0.047)        (0.055)        (0.062)   
+## --------------------------------------------------------
+## R^2              0.001          0.000          0.001    
+## Adj. R^2         0.001          0.000          0.001    
+## Num. obs.    28278          28140          30015        
+## RMSE             0.878          0.910          0.952    
+## N Clusters     316            316            310        
+## ========================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-1" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects</h2>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects---jewish-sector-2" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects - Jewish sector</h2>
+<p>Combined sector General DiD results + Fixed effects - Rest of israel by sectors</p>
+<pre><code>## 
+## ==============================================
+##                        Jewish sector          
+##             ----------------------------------
+##             Hebrew      Math        English   
+## ----------------------------------------------
+## did             0.017      -0.054       0.028 
+##                (0.057)     (0.061)     (0.053)
+## ----------------------------------------------
+## R^2             0.068       0.103       0.134 
+## Adj. R^2        0.058       0.093       0.125 
+## Num. obs.   28278       28140       30015     
+## RMSE            0.852       0.867       0.891 
+## N Clusters    316         316         310     
+## ==============================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-additional-variables-1" class="section level1">
+<h1>DiD regression with clustered SE + Fixed effects + additional variables</h1>
+<div id="did-regression-with-clustered-se-fixed-effects-additional-variables---jewish-sector-2" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector</h2>
+<p>Combined sector General DiD results + Fixed effects + Additional vars</p>
+<pre><code>## 
+## ========================================================================
+##                                             Jewish sector               
+##                              -------------------------------------------
+##                              Hebrew         Math           English      
+## ------------------------------------------------------------------------
+## Diff-in-Diff                     0.012         -0.067          0.051    
+##                                 (0.059)        (0.061)        (0.053)   
+## Sex                              0.260 ***     -0.176 ***     -0.004    
+##                                 (0.012)        (0.012)        (0.012)   
+## Father&#39;s years of education      0.015 ***      0.019 ***      0.018 ***
+##                                 (0.002)        (0.002)        (0.002)   
+## Mother&#39;s years of education      0.019 ***      0.026 ***      0.022 ***
+##                                 (0.002)        (0.003)        (0.003)   
+## Native indicator                 0.204 ***      0.042         -0.335 ***
+##                                 (0.033)        (0.031)        (0.030)   
+## Number of siblings               0.011 *        0.032 ***     -0.052 ***
+##                                 (0.006)        (0.006)        (0.006)   
+## Class size                       0.004         -0.001          0.002    
+##                                 (0.005)        (0.005)        (0.005)   
+## ------------------------------------------------------------------------
+## R^2                              0.111          0.146          0.162    
+## Adj. R^2                         0.100          0.136          0.153    
+## Num. obs.                    28237          28103          29973        
+## RMSE                             0.832          0.845          0.876    
+## N Clusters                     316            316            310        
+## ========================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="analysis-of-top-middle-third" class="section level1">
+<h1>Analysis of top Middle third</h1>
+<div id="section-1" class="section level45">
+<p class="heading"></p>
+</div>
+</div>
+<div id="did-regression-with-clustered-se" class="section level1">
+<h1>DiD regression with clustered SE</h1>
+<div id="did-regression-with-clustered-se---rest-regions---jewish-sector-only-1" class="section level2">
+<h2>DiD regression with clustered SE - rest regions - Jewish sector only</h2>
+</div>
+<div id="did-regression-with-clustered-se---rest-regions---arab-sector-only-1" class="section level2">
+<h2>DiD regression with clustered SE - rest regions - Arab sector only</h2>
+<p>Combined sector General DiD results - Rest of israel by sectors</p>
+<pre><code>## 
+## ========================================================================================
+##                          Jewish sector                           Arab sector            
+##              -------------------------------------  ------------------------------------
+##              Hebrew        Math         English     Arabic        Math         English  
+## ----------------------------------------------------------------------------------------
+## (Intercept)     -0.041         0.079       -0.087      0.322 ***    -0.016       -0.026 
+##                 (0.032)       (0.050)      (0.055)    (0.079)       (0.140)      (0.086)
+## treat            0.033         0.054       -0.026     -0.176 *      -0.420 **     0.078 
+##                 (0.052)       (0.062)      (0.072)    (0.097)       (0.162)      (0.118)
+## after           -0.078 **     -0.097 *      0.027     -0.153        -0.066        0.075 
+##                 (0.037)       (0.053)      (0.064)    (0.101)       (0.156)      (0.124)
+## did              0.082         0.038       -0.033      0.256 **      0.321 *      0.008 
+##                 (0.059)       (0.070)      (0.083)    (0.125)       (0.184)      (0.155)
+## ----------------------------------------------------------------------------------------
+## R^2              0.002         0.003        0.001      0.004         0.026        0.003 
+## Adj. R^2         0.002         0.003        0.000      0.004         0.026        0.003 
+## Num. obs.    26988         26981        23465       5787          5836         5996     
+## RMSE             0.987         0.982        1.021      0.901         0.900        0.908 
+## N Clusters     408           407          360         64            65           65     
+## ========================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-2" class="section level1">
+<h1>DiD regression with clustered SE + Fixed effects</h1>
+<div id="did-regression-with-clustered-se-fixed-effects---jewish-sector-3" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects - Jewish sector</h2>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects---arab-sector-1" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects - Arab sector</h2>
+<p>Combined sector General DiD results + Fixed effects - Rest of israel by sectors</p>
+<pre><code>## 
+## =================================================================================
+##                        Jewish sector                       Arab sector           
+##             ----------------------------------  ---------------------------------
+##             Hebrew      Math        English     Arabic     Math         English  
+## ---------------------------------------------------------------------------------
+## did             0.044       0.090      -0.048      0.127      0.356 **     0.208 
+##                (0.071)     (0.077)     (0.087)    (0.221)    (0.163)      (0.280)
+## ---------------------------------------------------------------------------------
+## R^2             0.091       0.166       0.167      0.094      0.174        0.134 
+## Adj. R^2        0.077       0.153       0.154      0.084      0.164        0.124 
+## Num. obs.   26988       26981       23465       5787       5836         5996     
+## RMSE            0.950       0.905       0.939      0.864      0.834        0.851 
+## N Clusters    408         407         360         64         65           65     
+## =================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-additional-variables---jewish-sector-3" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector</h2>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-additional-variables---arab-sector-1" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects + additional variables - Arab sector</h2>
+<p>Combined sector General DiD results + Fixed effects + Aditional vars - Rest of israel by sectors</p>
+<pre><code>## 
+## ==================================================================================================================
+##                                             Jewish sector                                Arab sector              
+##                              -------------------------------------------  ----------------------------------------
+##                              Hebrew         Math           English        Arabic        Math          English     
+## ------------------------------------------------------------------------------------------------------------------
+## Diff-in-Diff                     0.052          0.110         -0.066         0.082         0.272         0.193    
+##                                 (0.073)        (0.077)        (0.084)       (0.236)       (0.232)       (0.287)   
+## Sex                              0.292 ***     -0.098 ***      0.026         0.441 ***     0.068 ***     0.183 ***
+##                                 (0.015)        (0.017)        (0.017)       (0.021)       (0.021)       (0.027)   
+## Father&#39;s years of education      0.010 ***      0.013 ***      0.013 ***     0.005         0.008 ***     0.003    
+##                                 (0.002)        (0.002)        (0.002)       (0.003)       (0.003)       (0.004)   
+## Mother&#39;s years of education      0.019 ***      0.021 ***      0.017 ***     0.001         0.005         0.012 ***
+##                                 (0.002)        (0.002)        (0.003)       (0.004)       (0.004)       (0.004)   
+## Native indicator                 0.404 ***      0.152 ***     -0.202 ***     0.181         0.110        -0.452 *  
+##                                 (0.045)        (0.037)        (0.040)       (0.203)       (0.195)       (0.231)   
+## Number of siblings              -0.002          0.010 *       -0.066 ***    -0.037 ***    -0.034 ***    -0.061 ***
+##                                 (0.005)        (0.005)        (0.006)       (0.008)       (0.010)       (0.012)   
+## Class size                       0.006         -0.005         -0.017 ***     0.024         0.028        -0.012    
+##                                 (0.005)        (0.007)        (0.007)       (0.015)       (0.031)       (0.022)   
+## ------------------------------------------------------------------------------------------------------------------
+## R^2                              0.130          0.188          0.187         0.157         0.181         0.154    
+## Adj. R^2                         0.116          0.175          0.173         0.146         0.170         0.143    
+## Num. obs.                    26924          26909          23406          5784          5834          5994        
+## RMSE                             0.927          0.894          0.928         0.834         0.830         0.842    
+## N Clusters                     408            407            360            64            65            65        
+## ==================================================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="analysis-of-top-lower-third" class="section level1">
+<h1>Analysis of top Lower third</h1>
+<div id="section-2" class="section level45">
+<p class="heading"></p>
+</div>
+</div>
+<div id="did-regression-with-clustered-se-1" class="section level1">
+<h1>DiD regression with clustered SE</h1>
+<div id="did-regression-with-clustered-se---rest-regions---jewish-sector-only-2" class="section level2">
+<h2>DiD regression with clustered SE - rest regions - Jewish sector only</h2>
+</div>
+<div id="did-regression-with-clustered-se---rest-regions---arab-sector-only-2" class="section level2">
+<h2>DiD regression with clustered SE - rest regions - Arab sector only</h2>
+<p>Combined sector General DiD results - Rest of israel by sectors</p>
+<pre><code>## 
+## ================================================================================================
+##                           Jewish sector                               Arab sector               
+##              ---------------------------------------  ------------------------------------------
+##              Hebrew        Math         English       Arabic         Math           English     
+## ------------------------------------------------------------------------------------------------
+## (Intercept)    -0.461 ***    -0.338 **    -0.250 **       0.102 *       -0.309 ***     -0.207 **
+##                (0.118)       (0.134)      (0.119)        (0.058)        (0.083)        (0.086)  
+## treat           0.258 **      0.266 *      0.263 **      -0.255 ***     -0.103         -0.112   
+##                (0.129)       (0.141)      (0.133)        (0.077)        (0.106)        (0.108)  
+## after          -0.065        -0.098        0.141         -0.020          0.080          0.078   
+##                (0.122)       (0.157)      (0.139)        (0.074)        (0.109)        (0.104)  
+## did            -0.095        -0.013       -0.417 ***      0.094          0.004          0.146   
+##                (0.135)       (0.168)      (0.154)        (0.090)        (0.130)        (0.129)  
+## ------------------------------------------------------------------------------------------------
+## R^2             0.010         0.014        0.016          0.007          0.003          0.009   
+## Adj. R^2        0.009         0.014        0.016          0.007          0.003          0.009   
+## Num. obs.    9387          9368         7721          20145          19997          19450       
+## RMSE            1.109         1.007        0.996          1.011          0.965          0.977   
+## N Clusters    185           185          151            204            204            201       
+## ================================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-3" class="section level1">
+<h1>DiD regression with clustered SE + Fixed effects</h1>
+<div id="did-regression-with-clustered-se-fixed-effects---jewish-sector-4" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects - Jewish sector</h2>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects---arab-sector-2" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects - Arab sector</h2>
+<p>Combined sector General DiD results + Fixed effects - Rest of israel by sectors</p>
+<pre><code>## 
+## ===============================================================================
+##                      Jewish sector                       Arab sector           
+##             -------------------------------  ----------------------------------
+##             Hebrew     Math       English    Arabic      Math        English   
+## -------------------------------------------------------------------------------
+## did            0.072      0.020     -0.089       0.191       0.140       0.029 
+##               (0.151)    (0.168)    (0.188)     (0.137)     (0.173)     (0.164)
+## -------------------------------------------------------------------------------
+## R^2            0.127      0.214      0.153       0.158       0.223       0.191 
+## Adj. R^2       0.109      0.198      0.136       0.150       0.214       0.183 
+## Num. obs.   9387       9368       7721       20145       19997       19450     
+## RMSE           1.052      0.908      0.933       0.936       0.857       0.887 
+## N Clusters   185        185        151         204         204         201     
+## ===============================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-additional-variables---jewish-sector-4" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector</h2>
+</div>
+<div id="did-regression-with-clustered-se-fixed-effects-additional-variables---arab-sector-2" class="section level2">
+<h2>DiD regression with clustered SE + Fixed effects + additional variables - Arab sector</h2>
+<p>Combined sector General DiD results + Fixed effects + Aditional vars - Rest of israel by sectors</p>
+<pre><code>## 
+## ==================================================================================================================
+##                                            Jewish sector                               Arab sector                
+##                              ----------------------------------------  -------------------------------------------
+##                              Hebrew        Math          English       Arabic         Math           English      
+## ------------------------------------------------------------------------------------------------------------------
+## Diff-in-Diff                    0.089         0.045        -0.084          0.206          0.142          0.016    
+##                                (0.150)       (0.156)       (0.183)        (0.127)        (0.169)        (0.192)   
+## Sex                             0.360 ***    -0.088 ***     0.044          0.522 ***      0.151 ***      0.266 ***
+##                                (0.027)       (0.025)       (0.028)        (0.017)        (0.018)        (0.018)   
+## Father&#39;s years of education     0.007 ***     0.009 ***     0.002         -0.003 **      -0.002         -0.001    
+##                                (0.003)       (0.002)       (0.002)        (0.001)        (0.001)        (0.001)   
+## Mother&#39;s years of education     0.013 ***     0.014 ***     0.011 ***     -0.006 ***     -0.002         -0.002    
+##                                (0.003)       (0.003)       (0.003)        (0.002)        (0.002)        (0.002)   
+## Native indicator                0.443 ***     0.133 ***    -0.149 ***     -0.002          0.000         -0.454 ***
+##                                (0.070)       (0.050)       (0.047)        (0.138)        (0.110)        (0.117)   
+## Number of siblings             -0.048 ***    -0.021 **     -0.088 ***     -0.036 ***     -0.018 ***     -0.029 ***
+##                                (0.010)       (0.008)       (0.013)        (0.005)        (0.005)        (0.005)   
+## Class size                      0.011         0.008        -0.008          0.009          0.005         -0.002    
+##                                (0.008)       (0.009)       (0.014)        (0.007)        (0.014)        (0.015)   
+## ------------------------------------------------------------------------------------------------------------------
+## R^2                             0.165         0.223         0.171          0.228          0.230          0.212    
+## Adj. R^2                        0.147         0.207         0.153          0.220          0.222          0.203    
+## Num. obs.                    9331          9301          7662          20115          19963          19428        
+## RMSE                            1.025         0.902         0.922          0.896          0.853          0.876    
+## N Clusters                    185           185           151            204            204            201        
+## ==================================================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
 </div>
 </div>
 
