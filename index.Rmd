@@ -3,10 +3,12 @@ title: "Thesis Results Updated"
 author:  "Micha A."
 output:
   html_document:
-    fig_width: 1
+    fig_width: 6
 ---
 
+
 ----
+
 
 ```{r echo=FALSE}
 setwd("C:/Users/user/Documents/GitHub/rmarkdown-website-tutorial")
@@ -626,7 +628,7 @@ didreg.eng.tahton.jew.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MO
 
 
 ## DiD regression with clustered SE + Fixed effects - Arab sector
-```{r echo=FALSE}
+```{r include=FALSE}
 didreg.arb.tahton.arb.fe <- lm_robust(arb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                             data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
 didreg.mat.tahton.arb.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
