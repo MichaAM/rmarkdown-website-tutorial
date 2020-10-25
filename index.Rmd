@@ -626,7 +626,7 @@ didreg.eng.tahton.jew.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MO
 
 
 ## DiD regression with clustered SE + Fixed effects - Arab sector
-```{r include=FALSE}
+```{r echo=FALSE}
 didreg.arb.tahton.arb.fe <- lm_robust(arb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                             data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
 didreg.mat.tahton.arb.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
@@ -645,7 +645,7 @@ screenreg(list(didreg.heb.tahton.jew.fe, didreg.mat.tahton.jew.fe, didreg.eng.ta
 
 
 ## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
-```{r include=FALSE}
+```{r echo=FALSE}
 didreg.heb.fe.var.jew.tahton <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
                                  dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
@@ -660,7 +660,7 @@ didreg.eng.fe.var.jew.tahton <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_L
 
 
 ## DiD regression with clustered SE + Fixed effects + additional variables - Arab sector
-```{r include=FALSE}
+```{r echo=FALSE}
 didreg.arb.fe.var.arb.tahton <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
                                  dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
@@ -688,5 +688,85 @@ screenreg(list(didreg.heb.fe.var.jew.tahton, didreg.mat.fe.var.jew.tahton, didre
 ```
 
 
+# Reorginize ses tables 
+
+**Lower third**
+
+Jewish sector - all models for all 3 subjects 
+```{r echo=FALSE}
+screenreg(list(didreg.heb.jew.tahton, didreg.heb.tahton.jew.fe, didreg.heb.fe.var.jew.tahton,  
+               didreg.eng.jew.tahton, didreg.eng.tahton.jew.fe, didreg.eng.fe.var.jew.tahton,
+               didreg.mat.jew.tahton, didreg.mat.tahton.jew.fe, didreg.mat.fe.var.jew.tahton),
+          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
+                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,
+                                  "mean_kids_per_class_by_school_year" = "Class size"),
+          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+
+```
+
+
+Arab sector - all models for all 3 subjects 
+```{r echo=FALSE}
+screenreg(list(didreg.arb.arb.tahton, didreg.arb.tahton.arb.fe, didreg.arb.fe.var.arb.tahton,  
+               didreg.eng.arb.tahton, didreg.eng.tahton.arb.fe, didreg.eng.fe.var.arb.tahton,
+               didreg.mat.arb.tahton, didreg.mat.tahton.arb.fe, didreg.mat.fe.var.arb.tahton),
+          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
+                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,
+                                  "mean_kids_per_class_by_school_year" = "Class size"),
+          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+
+```
+
+
+**Middle third**
+
+Jewish sector - all models for all 3 subjects 
+```{r echo=FALSE}
+screenreg(list(didreg.heb.jew.emtsae, didreg.heb.emtsae.jew.fe, didreg.heb.fe.var.jew.emtsae,  
+               didreg.eng.jew.emtsae, didreg.eng.emtsae.jew.fe, didreg.eng.fe.var.jew.emtsae,
+               didreg.mat.jew.emtsae, didreg.mat.emtsae.jew.fe, didreg.mat.fe.var.jew.emtsae),
+          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
+                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,
+                                  "mean_kids_per_class_by_school_year" = "Class size"),
+          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+
+```
+
+
+Arab sector - all models for all 3 subjects 
+```{r echo=FALSE}
+screenreg(list(didreg.arb.arb.emtsae, didreg.arb.emtsae.arb.fe, didreg.arb.fe.var.arb.emtsae,  
+               didreg.eng.arb.emtsae, didreg.eng.emtsae.arb.fe, didreg.eng.fe.var.arb.emtsae,
+               didreg.mat.arb.emtsae, didreg.mat.emtsae.arb.fe, didreg.mat.fe.var.arb.emtsae),
+          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
+                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,
+                                  "mean_kids_per_class_by_school_year" = "Class size"),
+          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+
+```
+
+**Upper third**
+
+Jewish sector - all models for all 3 subjects 
+```{r echo=FALSE}
+screenreg(list(didreg.heb.jew.elion, didreg.heb.elion.jew.fe, didreg.heb.fe.var.jew.elion,  
+               didreg.eng.jew.elion, didreg.eng.elion.jew.fe, didreg.eng.fe.var.jew.elion,
+               didreg.mat.jew.elion, didreg.mat.elion.jew.fe, didreg.mat.fe.var.jew.elion),
+          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
+                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
+                                 "MISPAR_ACHIM" = "Number of siblings" ,
+                                  "mean_kids_per_class_by_school_year" = "Class size"),
+          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+
+```
 
 
