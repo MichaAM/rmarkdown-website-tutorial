@@ -1,9 +1,9 @@
 ---
 title: "Thesis Results Updated"
 author:  "Micha A."
-output:
-  html_document:
-    fig_width: 6
+output: html_document
+  
+    
 ---
 
 
@@ -606,14 +606,6 @@ didreg.eng.arb.tahton <- lm_robust(eng.zscore ~ treat + after + did,
 ```
 
 
-Combined sector General DiD results - Rest of israel by sectors 
-```{r echo=FALSE}
-screenreg(list(didreg.heb.jew.tahton, didreg.mat.jew.tahton, didreg.eng.jew.tahton, didreg.arb.arb.tahton, didreg.mat.arb.tahton, didreg.eng.arb.tahton),
-          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic", "Math", "English"))
-```
-
-
 # DiD regression with clustered SE + Fixed effects
 
 ## DiD regression with clustered SE + Fixed effects - Jewish sector
@@ -637,13 +629,6 @@ didreg.eng.tahton.arb.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MO
                             data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-
-Combined sector General DiD results + Fixed effects - Rest of israel by sectors 
-```{r echo=FALSE}
-screenreg(list(didreg.heb.tahton.jew.fe, didreg.mat.tahton.jew.fe, didreg.eng.tahton.jew.fe, didreg.arb.tahton.arb.fe, didreg.mat.tahton.arb.fe, didreg.eng.tahton.arb.fe),
-          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic", "Math", "English"))
-```
 
 
 ## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
@@ -676,21 +661,7 @@ didreg.eng.fe.var.arb.tahton <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_L
 ```
 
 
-
-Combined sector General DiD results + Fixed effects + Aditional vars - Rest of israel by sectors 
-```{r echo=FALSE}
-screenreg(list(didreg.heb.fe.var.jew.tahton, didreg.mat.fe.var.jew.tahton, didreg.eng.fe.var.jew.tahton, didreg.arb.fe.var.arb.tahton, didreg.mat.fe.var.arb.tahton, didreg.eng.fe.var.arb.tahton),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic", "Math", "English"))
-
-```
-
-
-# Reorginize ses tables 
+# Combined ses index models tables 
 
 **Lower third**
 
@@ -718,7 +689,7 @@ screenreg(list(didreg.arb.arb.tahton, didreg.arb.tahton.arb.fe, didreg.arb.fe.va
                                  "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
                                  "MISPAR_ACHIM" = "Number of siblings" ,
                                   "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          custom.header = list("Arabic" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 
 ```
@@ -750,7 +721,7 @@ screenreg(list(didreg.arb.arb.emtsae, didreg.arb.emtsae.arb.fe, didreg.arb.fe.va
                                  "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
                                  "MISPAR_ACHIM" = "Number of siblings" ,
                                   "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
+          custom.header = list("Arabic" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
 
 ```
@@ -758,7 +729,7 @@ screenreg(list(didreg.arb.arb.emtsae, didreg.arb.emtsae.arb.fe, didreg.arb.fe.va
 **Upper third**
 
 Jewish sector - all models for all 3 subjects 
-```{r echo=FALSE}
+```{r echo=FALSE, fig.width=2000, paged.print=TRUE}
 screenreg(list(didreg.heb.jew.elion, didreg.heb.elion.jew.fe, didreg.heb.fe.var.jew.elion,  
                didreg.eng.jew.elion, didreg.eng.elion.jew.fe, didreg.eng.fe.var.jew.elion,
                didreg.mat.jew.elion, didreg.mat.elion.jew.fe, didreg.mat.fe.var.jew.elion),
