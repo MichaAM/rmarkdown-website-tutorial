@@ -23,6 +23,17 @@
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
 <link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
 <script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/anchor-sections-1.0/anchor-sections.css" rel="stylesheet" />
+<script src="site_libs/anchor-sections-1.0/anchor-sections.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css">
@@ -840,10 +851,39 @@ final.df.tahton.arb &lt;- final.df.tahton %&gt;%
 </div>
 <div id="did-regression-with-clustered-se-fixed-effects-additional-variables---arab-sector-2" class="section level2">
 <h2>DiD regression with clustered SE + Fixed effects + additional variables - Arab sector</h2>
+<p>Combined sector General DiD results + Fixed effects + Aditional vars - Rest of israel by sectors</p>
+<pre><code>## 
+## ==================================================================================================================
+##                                            Jewish sector                               Arab sector                
+##                              ----------------------------------------  -------------------------------------------
+##                              Hebrew        Math          English       Arabic         Math           English      
+## ------------------------------------------------------------------------------------------------------------------
+## Diff-in-Diff                    0.089         0.045        -0.084          0.206          0.142          0.016    
+##                                (0.150)       (0.156)       (0.183)        (0.127)        (0.169)        (0.192)   
+## Sex                             0.360 ***    -0.088 ***     0.044          0.522 ***      0.151 ***      0.266 ***
+##                                (0.027)       (0.025)       (0.028)        (0.017)        (0.018)        (0.018)   
+## Father&#39;s years of education     0.007 ***     0.009 ***     0.002         -0.003 **      -0.002         -0.001    
+##                                (0.003)       (0.002)       (0.002)        (0.001)        (0.001)        (0.001)   
+## Mother&#39;s years of education     0.013 ***     0.014 ***     0.011 ***     -0.006 ***     -0.002         -0.002    
+##                                (0.003)       (0.003)       (0.003)        (0.002)        (0.002)        (0.002)   
+## Native indicator                0.443 ***     0.133 ***    -0.149 ***     -0.002          0.000         -0.454 ***
+##                                (0.070)       (0.050)       (0.047)        (0.138)        (0.110)        (0.117)   
+## Number of siblings             -0.048 ***    -0.021 **     -0.088 ***     -0.036 ***     -0.018 ***     -0.029 ***
+##                                (0.010)       (0.008)       (0.013)        (0.005)        (0.005)        (0.005)   
+## Class size                      0.011         0.008        -0.008          0.009          0.005         -0.002    
+##                                (0.008)       (0.009)       (0.014)        (0.007)        (0.014)        (0.015)   
+## ------------------------------------------------------------------------------------------------------------------
+## R^2                             0.165         0.223         0.171          0.228          0.230          0.212    
+## Adj. R^2                        0.147         0.207         0.153          0.220          0.222          0.203    
+## Num. obs.                    9331          9301          7662          20115          19963          19428        
+## RMSE                            1.025         0.902         0.922          0.896          0.853          0.876    
+## N Clusters                    185           185           151            204            204            201        
+## ==================================================================================================================
+## *** p &lt; 0.01; ** p &lt; 0.05; * p &lt; 0.1</code></pre>
 </div>
 </div>
-<div id="combined-ses-index-models-tables" class="section level1">
-<h1>Combined ses index models tables</h1>
+<div id="reorginize-ses-tables" class="section level1">
+<h1>Reorginize ses tables</h1>
 <p><strong>Lower third</strong></p>
 <p>Jewish sector - all models for all 3 subjects</p>
 <pre><code>## 
@@ -1003,7 +1043,7 @@ final.df.tahton.arb &lt;- final.df.tahton %&gt;%
 
 // add bootstrap table styles to pandoc tables
 function bootstrapStylePandocTables() {
-  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
 }
 $(document).ready(function () {
   bootstrapStylePandocTables();

@@ -6,6 +6,8 @@ title: "school-learning environment"
 setwd("C:/Users/user/Desktop/Aklim analysis")
 ```
 
+
+
 ```{r include=FALSE}
 library(sandwich)
 library(lmtest)
@@ -53,18 +55,17 @@ The choices in the questionnaire presented 5 possible answers: 1- Agree to 5- Di
 I standardized the answers grad using z score with yearly average. 
 
 
-
-
-# **Analysis by sector**
+**section 1 -  General sample analysis**
 
 ```{r include=FALSE}
-final$CODE_MIGZAR  <- ifelse(final$CODE_MIGZAR == "1", "0", "1")
 
 final_jew <- final %>% 
   filter(CODE_MIGZAR == "0")
 
 final_arb <- final %>% 
   filter(CODE_MIGZAR == "1")
+
+table(final$CODE_MIGZAR)
 ```
 
 
@@ -84,7 +85,6 @@ didreg.lang.jew.fe <- lm_robust(Lang ~ did, fixed_effects = ~CODE_MOSAD+SHNAT_LI
 didreg.lang.jew.fe.vars <- lm_robust(Lang ~ did + CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA +
                                      SES_index + TALMIDIM + SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
                                 data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
-
 ```
 
 DiD regression with clustered SE - Arab sector
@@ -562,8 +562,8 @@ screenreg(list(didreg.behave.jew, didreg.behave.jew.fe, didreg.behave.jew.fe.var
 
 
 
+**section 2 -  periphery vs rest analysis**
 
-# **Analysis by regions per sectors** 
 
 Split by region - Periphery vs Rest 
 ```{r echo=FALSE}
@@ -622,7 +622,6 @@ final_not_peri_jew <- final_not_periphery %>%
 final_not_peri_arb <- final_not_periphery %>%
   filter(CODE_MIGZAR == "1")
 ```
-
 
 
 ### 1. Using computers in language classes 
@@ -756,7 +755,15 @@ screenreg(list(didreg.Tech.jew.not.peri, didreg.Tech.jew.fe.not.peri, didreg.Tec
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
 
+Aggregated table for the 1-4 questions:
 
+```{r echo=FALSE}
+screenreg(list(didreg.lang.jew.not.peri, didreg.lang.jew.fe.not.peri, didreg.lang.jew.fe.vars.not.peri, didreg.English.jew.not.peri, didreg.English.jew.fe.not.peri, didreg.English.jew.fe.vars.not.peri, didreg.Math.jew.not.peri, didreg.Math.jew.fe.not.peri, didreg.Math.jew.fe.vars.not.peri, didreg.Tech.jew.not.peri, didreg.Tech.jew.fe.not.peri, didreg.Tech.jew.fe.vars.not.peri),
+          custom.header = list("Language" = 1:3, "English" = 4:6, "Math" = 7:9, "Science & Technonlogy" = 10:12), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c("Intercept", "Treat", "After", "Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education",
+                                "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+```
 
 
 ### 5. School's Website awareness 
@@ -890,6 +897,15 @@ screenreg(list(didreg.forum.jew.not.peri, didreg.forum.jew.fe.not.peri, didreg.f
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
 
+Aggregated table for the 5-8 questions:
+
+```{r echo=FALSE}
+screenreg(list(didreg.website.jew.not.peri, didreg.website.jew.fe.not.peri, didreg.website.jew.fe.vars.not.peri, didreg.Download.jew.not.peri, didreg.Download.jew.fe.not.peri, didreg.Download.jew.fe.vars.not.peri, didreg.upload.jew.not.peri, didreg.upload.jew.fe.not.peri, didreg.upload.jew.fe.vars.not.peri, didreg.forum.jew.not.peri, didreg.forum.jew.fe.not.peri, didreg.forum.jew.fe.vars.not.peri),
+          custom.header = list("Website" = 1:3, "Download" = 4:6, "Upload" = 7:9, "Forum" = 10:12), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c("Intercept", "Treat", "After", "Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education",
+                                "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+```
 
 
 ### 9. General school satisfaction Indicator   
@@ -965,3 +981,518 @@ screenreg(list(didreg.behave_index.jew.not.peri, didreg.behave_index.jew.fe.not.
                                 "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
           digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3"))
 ```
+
+
+Aggregated table for the 9-10 questions:
+
+```{r echo=FALSE}
+screenreg(list(didreg.feel_index.jew.not.peri, didreg.feel_index.jew.fe.not.peri, didreg.feel_index.jew.fe.vars.not.peri, didreg.behave_index.jew.not.peri, didreg.behave_index.jew.fe.not.peri, didreg.behave_index.jew.fe.vars.not.peri),
+          custom.header = list("General feeling indicator" = 1:3, "Student misbehavior indicator" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
+          custom.coef.names = c("Intercept", "Treat", "After", "Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education",
+                                "Number of siblings", "Native indicator", "SES index", "Class size", "School age"),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
+```
+
+ 
+
+**section 3 -  SES index analysis**
+
+
+Split by sectors 
+```{r include=FALSE}
+
+final_jew <- final %>% 
+  filter(CODE_MIGZAR == "0")
+
+final_arb <- final %>% 
+  filter(CODE_MIGZAR == "1")
+
+```
+
+Creat dummy variables for SES index
+```{r}
+
+final_jew$dummy_up <- ifelse(final_jew$SES_index <= 4, "1", "0")
+final_jew$dummy_mid <- ifelse(final_jew$SES_index > 4 & final_jew$SES_index <= 7, "1", "0")
+final_jew$dummy_low <- ifelse(final_jew$SES_index > 7, "1", "0")
+
+final_arb$dummy_up <- ifelse(final_arb$SES_index <= 4, "1", "0")
+final_arb$dummy_mid <- ifelse(final_arb$SES_index > 4 & final_arb$SES_index <= 7, "1", "0")
+final_arb$dummy_low <- ifelse(final_arb$SES_index > 7, "1", "0")
+
+```
+
+
+
+#   analysis by SES index
+
+**Q1: "Do you use a computer during language lessons?"**
+
+Jewish sector
+
+```{r echo=FALSE}
+
+didreg.lang.jew.ses <- lm_robust(Lang ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.jew.fe.ses <- lm_robust(Lang ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.jew.fe.vars.ses <- lm_robust(Lang ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.lang.arb.ses <- lm_robust(Lang ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.arb.fe.ses <- lm_robust(Lang ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.lang.arb.fe.vars.ses <- lm_robust(Lang ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.lang.jew.ses, didreg.lang.jew.fe.ses, didreg.lang.jew.fe.vars.ses, didreg.lang.arb.ses, didreg.lang.arb.fe.ses, didreg.lang.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+**Q2: "Do you use a computer during English lessons?"**
+
+Jewish sector
+
+```{r echo=FALSE}
+
+didreg.English.jew.ses <- lm_robust(English ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.jew.fe.ses <- lm_robust(English ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.jew.fe.vars.ses <- lm_robust(English ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.English.arb.ses <- lm_robust(English ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.arb.fe.ses <- lm_robust(English ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.English.arb.fe.vars.ses <- lm_robust(English ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.English.jew.ses, didreg.English.jew.fe.ses, didreg.English.jew.fe.vars.ses, didreg.English.arb.ses, didreg.English.arb.fe.ses, didreg.English.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+
+
+**Q3: "Do you use a computer during Math lessons?"**
+
+Jewish sector
+
+```{r echo=FALSE}
+
+didreg.Math.jew.ses <- lm_robust(Math ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.jew.fe.ses <- lm_robust(Math ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.jew.fe.vars.ses <- lm_robust(Math ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.Math.arb.ses <- lm_robust(Math ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.arb.fe.ses <- lm_robust(Math ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Math.arb.fe.vars.ses <- lm_robust(Math ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.Math.jew.ses, didreg.Math.jew.fe.ses, didreg.Math.jew.fe.vars.ses, didreg.Math.arb.ses, didreg.Math.arb.fe.ses, didreg.Math.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+**Q4: "Do you use a computer during Tech lessons?"**
+
+Jewish sector
+
+```{r echo=FALSE}
+
+didreg.Tech.jew.ses <- lm_robust(Tech ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.jew.fe.ses <- lm_robust(Tech ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.jew.fe.vars.ses <- lm_robust(Tech ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.Tech.arb.ses <- lm_robust(Tech ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.arb.fe.ses <- lm_robust(Tech ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Tech.arb.fe.vars.ses <- lm_robust(Tech ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.Tech.jew.ses, didreg.Tech.jew.fe.ses, didreg.Tech.jew.fe.vars.ses, didreg.Tech.arb.ses, didreg.Tech.arb.fe.ses, didreg.Tech.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+
+**Q5: "Does the school have an internet site?"**
+
+Jewish sector
+
+```{r echo=FALSE}
+
+didreg.Website.jew.ses <- lm_robust(dummy_yes_no_website ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Website.jew.fe.ses <- lm_robust(dummy_yes_no_website ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Website.jew.fe.vars.ses <- lm_robust(dummy_yes_no_website ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.Website.arb.ses <- lm_robust(dummy_yes_no_website ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Website.arb.fe.ses <- lm_robust(dummy_yes_no_website ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.Website.arb.fe.vars.ses <- lm_robust(dummy_yes_no_website ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.Website.jew.ses, didreg.Website.jew.fe.ses, didreg.Website.jew.fe.vars.ses, didreg.Website.arb.ses, didreg.Website.arb.fe.ses, didreg.Website.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+**Q6: "School's Website Download"**
+
+Jewish sector
+
+```{r echo=FALSE}
+
+didreg.download.jew.ses <- lm_robust(dummy_yes_no_download ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.download.jew.fe.ses <- lm_robust(dummy_yes_no_download ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.download.jew.fe.vars.ses <- lm_robust(dummy_yes_no_download ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.download.arb.ses <- lm_robust(dummy_yes_no_download ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.download.arb.fe.ses <- lm_robust(dummy_yes_no_download ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.download.arb.fe.vars.ses <- lm_robust(dummy_yes_no_download ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.download.jew.ses, didreg.download.jew.fe.ses, didreg.download.jew.fe.vars.ses, didreg.download.arb.ses, didreg.download.arb.fe.ses, didreg.download.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+**Q7: "School's Website Upload"**
+
+```{r echo=FALSE}
+
+didreg.upload.jew.ses <- lm_robust(dummy_yes_no_upload ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.upload.jew.fe.ses <- lm_robust(dummy_yes_no_upload ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.upload.jew.fe.vars.ses <- lm_robust(dummy_yes_no_upload ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.upload.arb.ses <- lm_robust(dummy_yes_no_upload ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.upload.arb.fe.ses <- lm_robust(dummy_yes_no_upload ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.upload.arb.fe.vars.ses <- lm_robust(dummy_yes_no_upload ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.upload.jew.ses, didreg.upload.jew.fe.ses, didreg.upload.jew.fe.vars.ses, didreg.upload.arb.ses, didreg.upload.arb.fe.ses, didreg.upload.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+
+**Q8: "Forum participation"**
+
+```{r echo=FALSE}
+
+didreg.forum.jew.ses <- lm_robust(dummy_yes_no_forum ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.forum.jew.fe.ses <- lm_robust(dummy_yes_no_forum ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.forum.jew.fe.vars.ses <- lm_robust(dummy_yes_no_forum ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.forum.arb.ses <- lm_robust(dummy_yes_no_forum ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.forum.arb.fe.ses <- lm_robust(dummy_yes_no_forum ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.forum.arb.fe.vars.ses <- lm_robust(dummy_yes_no_forum ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.forum.jew.ses, didreg.forum.jew.fe.ses, didreg.forum.jew.fe.vars.ses, didreg.forum.arb.ses, didreg.forum.arb.fe.ses, didreg.forum.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+**Q9: "Feel indicator"**
+
+```{r echo=FALSE}
+
+didreg.feel.jew.ses <- lm_robust(feel_index ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.feel.jew.fe.ses <- lm_robust(feel_index ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.feel.jew.fe.vars.ses <- lm_robust(feel_index ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.feel.arb.ses <- lm_robust(feel_index ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.feel.arb.fe.ses <- lm_robust(feel_index ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.feel.arb.fe.vars.ses <- lm_robust(feel_index ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.feel.jew.ses, didreg.feel.jew.fe.ses, didreg.feel.jew.fe.vars.ses, didreg.feel.arb.ses, didreg.feel.arb.fe.ses, didreg.feel.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+
+
+**Q10: "Behavior indicator"**
+
+```{r echo=FALSE}
+
+didreg.behave.jew.ses <- lm_robust(behave_index ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + after*dummy_mid + after*dummy_low +
+                                did*dummy_mid + did*dummy_low,
+                                data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.behave.jew.fe.ses <- lm_robust(behave_index ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.behave.jew.fe.vars.ses <- lm_robust(dummy_yes_no_forum ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + 
+                                        CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                        SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+
+Arab sector
+```{r echo=FALSE}
+didreg.behave.arb.ses <- lm_robust(behave_index ~ treat + after + did + dummy_low + treat*dummy_low + after*dummy_low + did*dummy_low ,
+                             data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.behave.arb.fe.ses <- lm_robust(behave_index ~ did + dummy_low + did*dummy_low, 
+                                    fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.behave.arb.fe.vars.ses <- lm_robust(behave_index ~ did + dummy_low + did*dummy_low + 
+                                         CODE_MIN + SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM_TSAD_AV_EM + ERETS_LEDA + TALMIDIM + 
+                                         SHNAT_YISUD, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, data = final_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+
+```
+
+
+```{r echo=FALSE}
+
+screenreg(list(didreg.behave.jew.ses, didreg.behave.jew.fe.ses, didreg.behave.jew.fe.vars.ses, didreg.behave.arb.ses, didreg.behave.arb.fe.ses, didreg.behave.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "School age"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
+```
+
+
+
+
+
+

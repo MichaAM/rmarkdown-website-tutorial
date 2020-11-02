@@ -1,9 +1,9 @@
 ---
 title: "Thesis Results Updated"
 author:  "Micha A."
-output: html_document
-  
-    
+output:
+  html_document:
+    fig_width: 6
 ---
 
 
@@ -90,6 +90,7 @@ length(unique(finald$CODE_MOSAD))
 table(finald$CODE_MIGZAR)
 ```
 
+**section 1 -  Full sample analysis**
 
 ### Split the data by sectores
 ```{r echo=FALSE}
@@ -207,8 +208,8 @@ screenreg(list(didreg.heb.fe.var.jew, didreg.mat.fe.var.jew, didreg.eng.fe.var.j
 ```
 
 
+**section 2 -  periphery vs rest**
 
-# DiD regression by regions - periphery vs rest
 Because almost all observation in the north and south regions took part in the program, I will check only the difference in the 
 other regions. 
 
@@ -363,383 +364,167 @@ screenreg(list(didreg.heb.fe.var.jew.rest, didreg.mat.fe.var.jew.rest, didreg.en
 ```
 
 
-### SES index analysis
+**Section 3 -  SES index analysis**
 
-# Split SES index to 3 levels index. 
+Split by sectors 
+```{r include=FALSE}
 
+finald_jew <- finald %>% 
+  filter(CODE_MIGZAR == "0")
+
+finald_arb <- finald %>% 
+  filter(CODE_MIGZAR == "1")
+
+```
+
+Creat dummy variables for SES index
 ```{r}
-final.df.elion <- finald %>%
-  filter(SES_index <= 4)
-final.df.emtsae <- finald %>%
-  filter(SES_index > 4 & SES_index <= 7)
-final.df.tahton <- finald %>%
-  filter(SES_index > 7)
-```
 
-# Split thirds by sector
+finald_jew$dummy_up <- ifelse(finald_jew$SES_index <= 4, "1", "0")
+finald_jew$dummy_mid <- ifelse(finald_jew$SES_index > 4 & finald_jew$SES_index <= 7, "1", "0")
+finald_jew$dummy_low <- ifelse(finald_jew$SES_index > 7, "1", "0")
 
-```{r}
-final.df.elion.jew <- final.df.elion %>%
-  filter(CODE_MIGZAR == "0")
-final.df.elion.arb <- final.df.elion %>%
-  filter(CODE_MIGZAR == "1")
-
-final.df.emtsae.jew <- final.df.emtsae %>%
-  filter(CODE_MIGZAR == "0")
-final.df.emtsae.arb <- final.df.emtsae %>%
-  filter(CODE_MIGZAR == "1")
-
-final.df.tahton.jew <- final.df.tahton %>%
-  filter(CODE_MIGZAR == "0")
-final.df.tahton.arb <- final.df.tahton %>%
-  filter(CODE_MIGZAR == "1")
+finald_arb$dummy_up <- ifelse(finald_arb$SES_index <= 4, "1", "0")
+finald_arb$dummy_mid <- ifelse(finald_arb$SES_index > 4 & finald_arb$SES_index <= 7, "1", "0")
+finald_arb$dummy_low <- ifelse(finald_arb$SES_index > 7, "1", "0")
 
 ```
 
+# Hebrew 
 
-# Analysis of top Upper third  
-#############################################
-
-## Simple DiD regression   
-
-### DiD regression with clustered SE  - Jewish sector only
+Jewish sector
 ```{r echo=FALSE}
-didreg.heb.jew.elion <- lm_robust(heb.zscore ~ treat + after + did,
-                        data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.jew.elion <- lm_robust(mat.zscore ~ treat + after + did,
-                        data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.jew.elion <- lm_robust(eng.zscore ~ treat + after + did,
-                        data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.heb.jew.ses <- lm_robust(heb.zscore ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + 
+                                after*dummy_mid + after*dummy_low + did*dummy_mid + did*dummy_low,
+                                data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.heb.jew.fe.ses <- lm_robust(heb.zscore ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.heb.jew.fe.vars.ses <- lm_robust(heb.zscore ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + CODE_MIN +
+                                        SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM + erets_leda_ISR + mean_kids_per_class_by_school_year + 
+                                        dummy_av_88 + dummy_em_88,
+                                        fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                        data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-
-Combined sector General DiD results - Rest of israel by sectors 
-```{r echo=FALSE, message=FALSE, warning=FALSE}
-screenreg(list(didreg.heb.jew.elion, didreg.mat.jew.elion, didreg.eng.jew.elion),
-          custom.header = list("Jewish sector" = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English"))
-```
-
-## DiD regression with clustered SE + Fixed effects
-
-## DiD regression with clustered SE + Fixed effects - Jewish sector
-```{r include=FALSE}
-didreg.heb.elion.jew.fe <- lm_robust(heb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.elion.jew.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.elion.jew.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata")
-```
-
-
-Combined sector General DiD results + Fixed effects - Rest of israel by sectors 
+Arab sector
 ```{r echo=FALSE}
-screenreg(list(didreg.heb.elion.jew.fe, didreg.mat.elion.jew.fe, didreg.eng.elion.jew.fe),
-          custom.header = list("Jewish sector" = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English"))
+didreg.arb.arb.ses <- lm_robust(arb.zscore ~ did + treat + after + dummy_low + treat*dummy_low + 
+                                after*dummy_low + did*dummy_low,
+                                data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.arb.arb.fe.ses <- lm_robust(arb.zscore ~ did + dummy_low + did*dummy_low, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                   data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.arb.arb.fe.vars.ses <- lm_robust(arb.zscore ~ did + dummy_low + did*dummy_low + CODE_MIN +
+                                        SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM + erets_leda_ISR + mean_kids_per_class_by_school_year + 
+                                        dummy_av_88 + dummy_em_88, 
+                                        fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                        data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-# DiD regression with clustered SE + Fixed effects + additional variables 
-
-
-## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
-```{r include=FALSE}
-didreg.heb.fe.var.jew.elion <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var.jew.elion <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var.jew.elion <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.elion.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-
-```
-
-
-Combined sector General DiD results + Fixed effects + Additional vars 
 ```{r echo=FALSE}
-screenreg(list(didreg.heb.fe.var.jew.elion, didreg.mat.fe.var.jew.elion, didreg.eng.fe.var.jew.elion),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Jewish sector" = 1:3), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English"))
 
+screenreg(list(didreg.heb.jew.ses, didreg.heb.jew.fe.ses, didreg.heb.jew.fe.vars.ses, didreg.arb.arb.ses, didreg.arb.arb.fe.ses, didreg.arb.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "Dummy father 88", "Dummy Mother 88"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
 ```
 
-# Analysis of top Middle third  
-#############################################
+# English  
 
-# DiD regression with clustered SE 
-
-## DiD regression with clustered SE - rest regions - Jewish sector only
+Jewish sector
 ```{r echo=FALSE}
-didreg.heb.jew.emtsae <- lm_robust(heb.zscore ~ treat + after + did,
-                        data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.jew.emtsae <- lm_robust(mat.zscore ~ treat + after + did,
-                        data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.jew.emtsae <- lm_robust(eng.zscore ~ treat + after + did,
-                        data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.english.jew.ses <- lm_robust(eng.zscore ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + 
+                                after*dummy_mid + after*dummy_low + did*dummy_mid + did*dummy_low,
+                                data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.english.jew.fe.ses <- lm_robust(eng.zscore ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.english.jew.fe.vars.ses <- lm_robust(eng.zscore ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + CODE_MIN +
+                                        SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM + erets_leda_ISR + mean_kids_per_class_by_school_year + 
+                                        dummy_av_88 + dummy_em_88,
+                                        fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                        data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-
-## DiD regression with clustered SE - rest regions - Arab sector only
+Arab sector
 ```{r echo=FALSE}
-didreg.arb.arb.emtsae <- lm_robust(arb.zscore ~ treat + after + did,
-                        data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.arb.emtsae <- lm_robust(mat.zscore ~ treat + after + did,
-                        data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.arb.emtsae <- lm_robust(eng.zscore ~ treat + after + did,
-                        data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata")
+didreg.english.arb.ses <- lm_robust(eng.zscore ~ did + treat + after + dummy_low + treat*dummy_low + 
+                                after*dummy_low + did*dummy_low,
+                                data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.english.arb.fe.ses <- lm_robust(eng.zscore ~ did + dummy_low + did*dummy_low, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                   data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.english.arb.fe.vars.ses <- lm_robust(eng.zscore ~ did + dummy_low + did*dummy_low + CODE_MIN +
+                                        SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM + erets_leda_ISR + mean_kids_per_class_by_school_year + 
+                                        dummy_av_88 + dummy_em_88, 
+                                        fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                        data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-
-Combined sector General DiD results - Rest of israel by sectors 
 ```{r echo=FALSE}
-screenreg(list(didreg.heb.jew.emtsae, didreg.mat.jew.emtsae, didreg.eng.jew.emtsae, didreg.arb.arb.emtsae, didreg.mat.arb.emtsae, didreg.eng.arb.emtsae),
-          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic", "Math", "English"))
+
+screenreg(list(didreg.english.jew.ses, didreg.english.jew.fe.ses, didreg.english.jew.fe.vars.ses, didreg.english.arb.ses, didreg.english.arb.fe.ses, didreg.english.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "Dummy father 88", "Dummy Mother 88"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
 ```
 
+# Math 
 
-# DiD regression with clustered SE + Fixed effects
-
-## DiD regression with clustered SE + Fixed effects - Jewish sector
-```{r include=FALSE}
-didreg.heb.emtsae.jew.fe <- lm_robust(heb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.emtsae.jew.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.emtsae.jew.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata")
-```
-
-
-## DiD regression with clustered SE + Fixed effects - Arab sector
-```{r include=FALSE}
-didreg.arb.emtsae.arb.fe <- lm_robust(arb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.emtsae.arb.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.emtsae.arb.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata")
-```
-
-
-Combined sector General DiD results + Fixed effects - Rest of israel by sectors 
+Jewish sector
 ```{r echo=FALSE}
-screenreg(list(didreg.heb.emtsae.jew.fe, didreg.mat.emtsae.jew.fe, didreg.eng.emtsae.jew.fe, didreg.arb.emtsae.arb.fe, didreg.mat.emtsae.arb.fe, didreg.eng.emtsae.arb.fe),
-          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic", "Math", "English"))
+
+didreg.math.jew.ses <- lm_robust(mat.zscore ~ did + treat + after + dummy_mid + dummy_low + treat*dummy_mid + treat*dummy_low + 
+                                after*dummy_mid + after*dummy_low + did*dummy_mid + did*dummy_low,
+                                data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.math.jew.fe.ses <- lm_robust(mat.zscore ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.math.jew.fe.vars.ses <- lm_robust(mat.zscore ~ did + dummy_mid + dummy_low + did*dummy_mid + did*dummy_low + CODE_MIN +
+                                        SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM + erets_leda_ISR + mean_kids_per_class_by_school_year + 
+                                        dummy_av_88 + dummy_em_88,
+                                        fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                        data = finald_jew, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
-```{r include=FALSE}
-didreg.heb.fe.var.jew.emtsae <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var.jew.emtsae <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var.jew.emtsae <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.emtsae.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-
-```
-
-
-## DiD regression with clustered SE + Fixed effects + additional variables - Arab sector
-```{r include=FALSE}
-didreg.arb.fe.var.arb.emtsae <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var.arb.emtsae <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var.arb.emtsae <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.emtsae.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-
-```
-
-
-
-Combined sector General DiD results + Fixed effects + Aditional vars - Rest of israel by sectors 
+Arab sector
 ```{r echo=FALSE}
-screenreg(list(didreg.heb.fe.var.jew.emtsae, didreg.mat.fe.var.jew.emtsae, didreg.eng.fe.var.jew.emtsae, didreg.arb.fe.var.arb.emtsae, didreg.mat.fe.var.arb.emtsae, didreg.eng.fe.var.arb.emtsae),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,"SES_index" = "SES index",
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Jewish sector" = 1:3,  "Arab sector" = 4:6), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Hebrew", "Math", "English", "Arabic", "Math", "English"))
+didreg.math.arb.ses <- lm_robust(mat.zscore ~ did + treat + after + dummy_low + treat*dummy_low + 
+                                after*dummy_low + did*dummy_low,
+                                data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
 
+didreg.math.arb.fe.ses <- lm_robust(mat.zscore ~ did + dummy_low + did*dummy_low, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
+                                   data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
+
+didreg.math.arb.fe.vars.ses <- lm_robust(mat.zscore ~ did + dummy_low + did*dummy_low + CODE_MIN +
+                                        SHNOT_LIMUD_EM + SHNOT_LIMUD_AV + MISPAR_ACHIM + erets_leda_ISR + mean_kids_per_class_by_school_year + 
+                                        dummy_av_88 + dummy_em_88, 
+                                        fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD, 
+                                        data = finald_arb, clusters = CODE_MOSAD, se_type = "stata")
 ```
 
-# Analysis of top Lower third  
-#############################################
-
-# DiD regression with clustered SE 
-
-## DiD regression with clustered SE - rest regions - Jewish sector only
 ```{r echo=FALSE}
-didreg.heb.jew.tahton <- lm_robust(heb.zscore ~ treat + after + did,
-                        data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.jew.tahton <- lm_robust(mat.zscore ~ treat + after + did,
-                        data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.jew.tahton <- lm_robust(eng.zscore ~ treat + after + did,
-                        data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata")
-```
 
-
-## DiD regression with clustered SE - rest regions - Arab sector only
-```{r echo=FALSE}
-didreg.arb.arb.tahton <- lm_robust(arb.zscore ~ treat + after + did,
-                        data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.arb.tahton <- lm_robust(mat.zscore ~ treat + after + did,
-                        data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.arb.tahton <- lm_robust(eng.zscore ~ treat + after + did,
-                        data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
-```
-
-
-# DiD regression with clustered SE + Fixed effects
-
-## DiD regression with clustered SE + Fixed effects - Jewish sector
-```{r include=FALSE}
-didreg.heb.tahton.jew.fe <- lm_robust(heb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.tahton.jew.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.tahton.jew.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata")
-```
-
-
-## DiD regression with clustered SE + Fixed effects - Arab sector
-```{r include=FALSE}
-didreg.arb.tahton.arb.fe <- lm_robust(arb.zscore ~  did, fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.mat.tahton.arb.fe <- lm_robust(mat.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
-didreg.eng.tahton.arb.fe <- lm_robust(eng.zscore ~  did,fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                            data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata")
+screenreg(list(didreg.math.jew.ses, didreg.math.jew.fe.ses, didreg.math.jew.fe.vars.ses, didreg.math.arb.ses, didreg.math.arb.fe.ses, didreg.math.arb.fe.vars.ses),
+          custom.coef.names = c("Intercept", "Reform DiD", "Treat", "After", "Middle SES index", "Low SES index", "Treat*Middle SES index", "Treat*Low SES index", "After*Middle SES index", "After*Low SES index", "Middle SES index*Reform DiD", "Low SES index*Reform DiD", "Male indicator", "Mother's years of education", "Father's years of education", "Number of siblings", "Native indicator", "Class size", "Dummy father 88", "Dummy Mother 88"),
+          custom.header = list("Jewish" = 1:3, "Arab" = 4:6), include.ci = F, stars = c(.1, .05, .01),
+          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3","Model 1", "Model 2", "Model 3"))
 ```
 
 
 
-## DiD regression with clustered SE + Fixed effects + additional variables - Jewish sector
-```{r echo=FALSE}
-didreg.heb.fe.var.jew.tahton <- lm_robust(heb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var.jew.tahton <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var.jew.tahton <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.tahton.jew, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-
-```
 
 
-## DiD regression with clustered SE + Fixed effects + additional variables - Arab sector
-```{r echo=FALSE}
-didreg.arb.fe.var.arb.tahton <- lm_robust(arb.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR  + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.mat.fe.var.arb.tahton <- lm_robust(mat.zscore ~ did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-didreg.eng.fe.var.arb.tahton <- lm_robust(eng.zscore ~  did + CODE_MIN + SHNOT_LIMUD_AV + SHNOT_LIMUD_EM + dummy_av_88 + 
-                                 dummy_em_88 + mean_kids_per_class_by_school_year + erets_leda_ISR + MISPAR_ACHIM , fixed_effects = ~CODE_MOSAD+SHNAT_LIMUD,
-                               data = final.df.tahton.arb, clusters = CODE_MOSAD, se_type = "stata", try_cholesky = TRUE)
-
-```
 
 
-# Combined ses index models tables 
 
-**Lower third**
-
-Jewish sector - all models for all 3 subjects 
-```{r echo=FALSE}
-screenreg(list(didreg.heb.jew.tahton, didreg.heb.tahton.jew.fe, didreg.heb.fe.var.jew.tahton,  
-               didreg.eng.jew.tahton, didreg.eng.tahton.jew.fe, didreg.eng.fe.var.jew.tahton,
-               didreg.mat.jew.tahton, didreg.mat.tahton.jew.fe, didreg.mat.fe.var.jew.tahton),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
-
-```
-
-
-Arab sector - all models for all 3 subjects 
-```{r echo=FALSE}
-screenreg(list(didreg.arb.arb.tahton, didreg.arb.tahton.arb.fe, didreg.arb.fe.var.arb.tahton,  
-               didreg.eng.arb.tahton, didreg.eng.tahton.arb.fe, didreg.eng.fe.var.arb.tahton,
-               didreg.mat.arb.tahton, didreg.mat.tahton.arb.fe, didreg.mat.fe.var.arb.tahton),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Arabic" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
-
-```
-
-
-**Middle third**
-
-Jewish sector - all models for all 3 subjects 
-```{r echo=FALSE}
-screenreg(list(didreg.heb.jew.emtsae, didreg.heb.emtsae.jew.fe, didreg.heb.fe.var.jew.emtsae,  
-               didreg.eng.jew.emtsae, didreg.eng.emtsae.jew.fe, didreg.eng.fe.var.jew.emtsae,
-               didreg.mat.jew.emtsae, didreg.mat.emtsae.jew.fe, didreg.mat.fe.var.jew.emtsae),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
-
-```
-
-
-Arab sector - all models for all 3 subjects 
-```{r echo=FALSE}
-screenreg(list(didreg.arb.arb.emtsae, didreg.arb.emtsae.arb.fe, didreg.arb.fe.var.arb.emtsae,  
-               didreg.eng.arb.emtsae, didreg.eng.emtsae.arb.fe, didreg.eng.fe.var.arb.emtsae,
-               didreg.mat.arb.emtsae, didreg.mat.emtsae.arb.fe, didreg.mat.fe.var.arb.emtsae),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Arabic" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
-
-```
-
-**Upper third**
-
-Jewish sector - all models for all 3 subjects 
-```{r echo=FALSE, fig.width=2000, paged.print=TRUE}
-screenreg(list(didreg.heb.jew.elion, didreg.heb.elion.jew.fe, didreg.heb.fe.var.jew.elion,  
-               didreg.eng.jew.elion, didreg.eng.elion.jew.fe, didreg.eng.fe.var.jew.elion,
-               didreg.mat.jew.elion, didreg.mat.elion.jew.fe, didreg.mat.fe.var.jew.elion),
-          custom.coef.map = list("did" = "Diff-in-Diff", "CODE_MIN" = "Sex", "SHNOT_LIMUD_AV" = "Father's years of education",
-                                 "SHNOT_LIMUD_EM" = "Mother's years of education","erets_leda_ISR" = "Native indicator",
-                                 "MISPAR_ACHIM" = "Number of siblings" ,
-                                  "mean_kids_per_class_by_school_year" = "Class size"),
-          custom.header = list("Hebrew" = 1:3,  "English" = 4:6, "Math" = 7:9), include.ci = F, stars = c(.1, .05, .01), 
-          digits = 3, custom.model.names = c("Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3", "Model 1", "Model 2", "Model 3"))
-
-```
 
 
